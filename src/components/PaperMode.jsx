@@ -231,6 +231,7 @@ export default function PaperMode({ onBack, onLockChange }) {
                     {cur.no}. {PAPER_SUBJECT(cur.no)} · {cur.year} 真题
                   </div>
                   <div className="quiz-stem">{cur.stem}</div>
+                  {cur.options && cur.options[0] && cur.options[0].startsWith('（图') && <Fig id={cur.id} style={{ marginTop: 8 }} />}
                   <div className="quiz-options">
                     {cur.options.map((o, i) => {
                       const L = String.fromCharCode(65 + i)
@@ -247,6 +248,7 @@ export default function PaperMode({ onBack, onLockChange }) {
                 <div>
                   <div className="quiz-q-type">大题 · {cur.subject} · {cur.year} 真题</div>
                   <div className="quiz-stem">{cur.stem}</div>
+                  {cur.options && cur.options[0] && cur.options[0].startsWith('（图') && <Fig id={cur.id} style={{ marginTop: 8 }} />}
                   {(cur.parts || []).map((p, i) => (
                     <div key={i} style={{ marginBottom: 8 }}>
                       <div className="tiny" style={{ fontWeight: 600 }}>{p.prompt}</div>

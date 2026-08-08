@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react'
 import Icon from './Icon'
 import { SEED_QUESTIONS, SEED_META } from '../lib/qbankSeed.js'
 import { ESSAY } from '../lib/qbankEssay.js'
+import { Fig } from './qbankRichText'
 
 const SUBJECTS = ['数据结构', '计算机组成', '操作系统', '计算机网络']
 
@@ -46,6 +47,7 @@ export default function ExamQBank() {
               {(q.tags || []).length > 0 && <span style={{ color: 'var(--ink-soft)', fontWeight: 400, marginLeft: 6 }}>{q.tags.join('、')}</span>}
             </div>
             <div style={{ fontSize: 13.5, lineHeight: 1.65 }}>{q.stem}</div>
+            {q.options[0] && q.options[0].startsWith('（图') && <Fig id={q.id} style={{ marginTop: 8 }} />}
             <div style={{ marginTop: 8, display: 'grid', gap: 5 }}>
               {q.options.map((o, i) => (
                 <div key={i} style={{ display: 'flex', gap: 8, fontSize: 13, color: 'var(--ink-soft)' }}>

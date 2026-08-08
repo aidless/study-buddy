@@ -2,5 +2,12 @@
 export function RichText({ q, children }) {
   return <div>{children || q?.stem}</div>
 }
-export async function loadFigs() { return {} }
-export const figsLoaded = false
+import { FIGURES } from '../lib/qbankFigures.js'
+
+export function Fig({ id, style }) {
+  const svg = FIGURES[id]
+  if (!svg) return null
+  return <div className="qfig" style={style} dangerouslySetInnerHTML={{ __html: svg }} />
+}
+export async function loadFigs() { return FIGURES }
+export const figsLoaded = true

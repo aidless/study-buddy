@@ -4,6 +4,7 @@ import Icon from './Icon'
 import { buildQuizPool, drawQuestions, gradeQuestion } from '../lib/quizEngine'
 import { addSelfTest } from '../lib/db'
 import { collectWrongToBook } from '../lib/quizWrong'
+import { Fig } from './qbankRichText'
 
 const TYPE_CHIPS = [
   { key: 'choice', label: '选择题', icon: 'check' },
@@ -117,6 +118,7 @@ export default function QuizTest({ subject, topic, onClose }) {
                 {q.source === 'practice' ? '模拟练习 · ' + (TYPE_CHIPS.find((t) => t.key === q.type)?.label || q.type) : (TYPE_CHIPS.find((t) => t.key === q.type)?.label || q.type) + ' · ' + q.year + ' 年真题'}
               </div>
               <div className="quiz-stem">{q.stem}</div>
+              {q.options && q.options[0] && q.options[0].startsWith('（图') && <Fig id={q.id} style={{ marginTop: 8 }} />}
               {q.type === 'choice' && (
                 <div className="quiz-options">
                   {q.options.map((o, i) => {
