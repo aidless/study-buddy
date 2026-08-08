@@ -1,0 +1,90 @@
+import json, os, re, datetime
+
+src = r"C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\agent\haolo-ai-home\sessions\2026\08\07\rollout-2026-08-07T10-51-25-019fda21-efd4-7f62-8090-4e5058279dca.jsonl"
+out = r"C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\论文\outputs\agent_审稿对话_导出_2026-08-07.md"
+
+def strip_internal(text):
+    tags = [
+        ("<haolo_windows_utf8_reminder>", "</haolo_windows_utf8_reminder>"),
+        ("<haolo_thread_continuation_handoff>", "</haolo_thread_continuation_handoff>"),
+        ("<haolo_thread_continuation_copy>", "</haolo_thread_continuation_copy>"),
+        ("<haolo_thread_continuation_welcome>", "</haolo_thread_continuation_welcome>"),
+        ("<permissions instructions>", "</permissions instructions>"),
+        ("<environment_context>", "</environment_context>"),
+        ("<multi_agent_mode>", "</multi_agent_mode>"),
+        ("<haolo_identity>", "</haolo_identity>"),
+        ("<haolo_execution_mode>", "</haolo_execution_mode>"),
+        ("<haolo_media_routing>", "</haolo_media_routing>"),
+        ("<skills_instructions>", "</skills_instructions>"),
+        ("<plugins_instructions>", "</plugins_instructions>"),
+        ("<haolo_thread_group_context>", "</haolo_thread_group_context>"),
+        ("<haolo_thread_group_memory>", "</haolo_thread_group_memory>"),
+        ("<haolo_desktop_instructions>", "</haolo_desktop_instructions>"),
+    ]
+    for a, b in tags:
+        while a in text:
+            i = text.find(a)
+            j = text.find(b, i)
+            if j == -1:
+                text = text[:i]
+                break
+            text = text[:i] + text[j + len(b):]
+    return text.strip()
+
+def content_to_text(items):
+    parts = []
+    for it in items or []:
+        if isinstance(it, dict):
+            t = it.get("text")
+            if t and it.get("type") in ("input_text", "output_text", "text"):
+                parts.append(t)
+    return "\n".join(parts)
+
+msgs = []
+with open(src, "r", encoding="utf-8") as f:
+    for line in f:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            ev = json.loads(line)
+        except Exception:
+            continue
+        ts = ev.get("timestamp", "")
+        typ = ev.get("type")
+        if typ == "response_item":
+            p = ev.get("payload") or {}
+            role = p.get("role")
+            if role in ("user", "assistant"):
+                text = content_to_text(p.get("content"))
+                if text.strip():
+                    msgs.append((ts, role, strip_internal(text)))
+
+print("extracted messages:", len(msgs))
+
+lines = []
+lines.append("# 审稿对话导出（agent 分组）")
+lines.append("")
+lines.append("- 会话 ID：`019fda21-efd4-7f62-8090-4e5058279dca`")
+lines.append("- 开始时间：2026-08-07 10:51（会话记录起于 02:51 UTC）")
+lines.append("- 内容关键词：REVIEW_FOUR_PAPERS R7/R9–R13、Review-Agent、Round 21、ACCEPT_PLAN")
+lines.append("- 消息数：用户 %d 条 / 小咯 %d 条" % (sum(1 for m in msgs if m[1] == "user"), sum(1 for m in msgs if m[1] == "assistant")))
+lines.append("- 来源文件：`rollout-2026-08-07T10-51-25-019fda21-efd4-7f62-8090-4e5058279dca.jsonl`")
+lines.append("")
+lines.append("---")
+lines.append("")
+
+for ts, role, text in msgs:
+    try:
+        dt = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone().strftime("%m-%d %H:%M")
+    except Exception:
+        dt = ts
+    label = "👤 你" if role == "user" else "🤖 小咯"
+    lines.append(f"## {label}（{dt}）")
+    lines.append("")
+    lines.append(text)
+    lines.append("")
+
+with open(out, "w", encoding="utf-8") as f:
+    f.write("\n".join(lines))
+print("written:", out, os.path.getsize(out), "bytes")

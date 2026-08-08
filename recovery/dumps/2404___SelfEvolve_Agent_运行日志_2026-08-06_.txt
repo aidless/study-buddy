@@ -1,0 +1,67 @@
+# SelfEvolve Agent 运行日志（2026-08-06）
+
+## 构建完成的内容
+
+在 `outputs/selfevolve/agent/` 下实现了一个可运行的最小可信自进化闭环：
+
+```text
+observe -> diagnose -> propose -> evaluate -> promote/reject
+```
+
+模型端点：`http://127.0.0.1:8080/v1`（llama.cpp llama-server，`lfm2.5-2.6b`，工具调用已验证）。
+
+关键组件：
+
+- `control_plane.json`：冻结配置（端点、采样、预算、晋升门、Curator 规则）；
+- `task_bank.json`：44 个冻结任务（28 acquisition / 8 validation / 8 sealed，含 16 个 hard v2 任务）；
+- `agent/ledger.py`：追加式 SHA-256 哈希链账本（篡改可检测）；
+- `agent/tools.py`：沙箱工具 + 权限 broker（只能写 target.py，禁止 subprocess/socket/文件 IO）；
+- `agent/skills.py`：技能库 + Curator（拒绝修改测试/账本/控制面的候选）+ 冻结检索策略 + 安慰剂块；
+- `agent/gate.py`：双 oracle 晋升门 + 证据分型（bug_discriminating / regression_only）；
+- `agent/cycle.py`：acquire → diagnose → curate → validate → sealed → report 编排器；
+- `tests/`：19 个单元测试（账本、门、Curator、沙箱），全部通过。
+
+## 烟测 1：容易任务库（state/）
+
+- acquisition：6 题 base 策略全部解决（6/6）；
+- 失败样本：0 → 无候选 → 无晋升；
+- sealed（base）：4/4；
+- 结论：模型太强/任务太易，闭环正确停留在 base（没有学习信号不是 bug）。
+
+## 烟测 2：hard v2 任务库（state_v2/）
+
+- acquisition：10 题 base 解决 8/10；失败：`exception_h2`（时长解析漏了无小时格式）、`tool_h1`（分页抓取未提交代码）；
+- diagnose：模型反思生成 6 个候选技能（每个失败任务 3 条），全部通过 Curator 进入验证；
+- validate（4 个未见过的 hard 验证任务，三臂）：
+  - base：3/4；placebo：见 `validation_results.json`；skills：2/4；
+  - 技能臂丢失 `boundary_v2`，improvement = -0.25 < delta_min 0.0 → **REJECT**；
+  - acquisition 回归臂无回归、证据全部可区分目标缺陷，但独立验证未通过，候选不晋升；
+- sealed（base，best_so_far 语义）：3/4；
+- 账本 25 条事件校验通过，负结果完整记录。
+
+## 过程中发现并修复的工程问题
+
+1. **思考预算饿死**：LFM2.5 把 diagnose 的 640 token 全部花在 `reasoning_content`，`content` 为空且 `finish_reason=length`；修复为默认 3072 token + 从 reasoning 兜底解析 + 原始响应落盘审计（`state_v2/diagnose_raw/`）。
+2. **模板文字被照抄**：模型把 `exception|boundary|state|tool_error` 原样当 trigger_category；提示词改为“选一个词”，Curator 增加严格归一化。
+3. **evidence_ref 带注释**：模型输出 `tool_h1 (category: tool_error)`；Curator 改为按任务 ID 前缀解析。
+4. **改完不提交**：模型写完 target.py 但未调 submit_fix；runner 增加“文件内容兜底”，若文件已被修改则按当前内容评测。
+
+## 证据边界（强制声明）
+
+- 两轮烟测都是工程验证：样本量小、任务为手工构造，任何“8/10”“3/4”都只描述本机、本任务库、本策略；
+- 本轮唯一自进化事件是**拒绝**：候选技能未通过独立验证。按理论契约，“拒绝并保留 incumbent”是正确结果，不把负结果粉饰成提升；
+- 要支撑可发表主张，下一步需要：规则族隔离的大任务库、多轮重复采样、预注册 delta_min/错误预算、独立统计检验（McNemar/配对精确检验）、以及把 sealed 集做成时间锁定且完全未暴露。
+
+## 复现命令
+
+```powershell
+# 全流程（当前状态目录已含两轮结果）
+powershell -ExecutionPolicy Bypass -File .\run_smoke.ps1
+
+# 分相位
+python -m agent.cycle --phase all --smoke --state-dir state_v3
+python -m agent.cycle --phase report --smoke --state-dir state_v3
+
+# 单元测试
+python -m unittest discover -s tests -v
+```

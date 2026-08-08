@@ -1,0 +1,71 @@
+import sqlite3, os, json, glob
+
+home = r"C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\haolo-ai-home"
+
+print("=== sessions tree (top 3 levels) ===")
+sess = os.path.join(home, "sessions")
+if os.path.isdir(sess):
+    for root, dirs, files in os.walk(sess):
+        depth = root[len(sess):].count(os.sep)
+        if depth <= 3:
+            print(root[len(home)+1:] + "/", "files:", len(files))
+else:
+    print("no sessions dir")
+
+print()
+print("=== session_index.jsonl ===")
+idx = os.path.join(home, "session_index.jsonl")
+if os.path.exists(idx):
+    with open(idx, "r", encoding="utf-8", errors="replace") as f:
+        lines = f.readlines()
+    print("lines:", len(lines))
+    for line in lines[:5]:
+        print(line[:500])
+    print("...last 3:")
+    for line in lines[-3:]:
+        print(line[:500])
+else:
+    print("no index file")
+
+print()
+print("=== archived_sessions ===")
+arch = os.path.join(home, "archived_sessions")
+if os.path.isdir(arch):
+    items = os.listdir(arch)
+    print("entries:", len(items))
+    for it in items[:20]:
+        p = os.path.join(arch, it)
+        mtime = os.path.getmtime(p)
+        import datetime
+        print(it, "mtime:", datetime.datetime.fromtimestamp(mtime).isoformat())
+else:
+    print("no archived_sessions dir")
+
+print()
+print("=== state_5.sqlite threads ===")
+db = os.path.join(home, "state_5.sqlite")
+con = sqlite3.connect("file:"+db.replace("\\","/")+"?mode=ro", uri=True)
+con.row_factory = sqlite3.Row
+cur = con.cursor()
+print("threads total:", cur.execute("SELECT COUNT(*) FROM threads").fetchone()[0])
+rows = cur.execute("SELECT id, rollout_path, created_at, updated_at, archived, archived_at, title FROM threads ORDER BY created_at DESC LIMIT 60").fetchall()
+import datetime
+for r in rows:
+    d = dict(r)
+    ca = datetime.datetime.fromtimestamp(d["created_at"]).isoformat() if d["created_at"] else None
+    ua = datetime.datetime.fromtimestamp(d["updated_at"]).isoformat() if d["updated_at"] else None
+    title = (d["title"] or "")[:60].replace("\n", " ")
+    print(ca, "|", ua, "|archived:", d["archived"], "|", title)
+con.close()
+
+print()
+print("=== rollout files across default home ===")
+rollouts = glob.glob(os.path.join(home, "sessions", "**", "rollout-*.jsonl"), recursive=True)
+print("rollout count:", len(rollouts))
+by_month = {}
+for r in rollouts:
+    mt = os.path.getmtime(r)
+    ym = datetime.datetime.fromtimestamp(mt).strftime("%Y-%m")
+    by_month.setdefault(ym, []).append(mt)
+for k in sorted(by_month):
+    print(k, "count:", len(by_month[k]), "newest:", datetime.datetime.fromtimestamp(max(by_month[k])).strftime("%m-%d %H:%M"), "oldest:", datetime.datetime.fromtimestamp(min(by_month[k])).strftime("%m-%d %H:%M"))

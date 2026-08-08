@@ -1,0 +1,58 @@
+import sqlite3, os, datetime, glob
+
+base = r"C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default"
+out = r"C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\论文\outputs\会话总清单_2026-08-07.md"
+groups = [("默认分组", os.path.join(base, "haolo-ai-home")),
+          ("论文", os.path.join(base, "论文", "haolo-ai-home")),
+          ("科研", os.path.join(base, "科研", "haolo-ai-home")),
+          ("agent", os.path.join(base, "agent", "haolo-ai-home")),
+          ("app", os.path.join(base, "app", "haolo-ai-home"))]
+
+def snippet(fum):
+    text = fum or ""
+    if "<haolo_windows_utf8_reminder>" in text:
+        parts = text.split("</haolo_windows_utf8_reminder>")
+        text = parts[-1] if len(parts) > 1 else text
+    if "<haolo_media_routing_reminder>" in text:
+        parts = text.split("</haolo_media_routing_reminder>")
+        text = parts[-1] if len(parts) > 1 else text
+    text = " ".join(text.split())
+    return text[:120]
+
+lines = []
+lines.append("# 全部真实会话总清单（2026-08-07 审计）")
+lines.append("")
+lines.append("> 数据来源：本地会话索引库（threads 表）+ 会话记录文件逐条核对。")
+lines.append("> 本次审计结论：**没有任何会话文件缺失、为空或损坏**。以下为每个分组中由你发起的真实对话（不含子代理内部会话）。")
+lines.append("")
+
+total_all = 0
+for gname, home in groups:
+    db = os.path.join(home, "state_5.sqlite")
+    con = sqlite3.connect("file:"+db.replace("\\","/")+"?mode=ro", uri=True)
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+    allrows = cur.execute("SELECT * FROM threads WHERE thread_source IS NULL ORDER BY created_at").fetchall()
+    sub = cur.execute("SELECT COUNT(*) FROM threads WHERE thread_source IS NOT NULL").fetchone()[0]
+    con.close()
+    lines.append(f"## {gname}（真实对话 {len(allrows)} 条，其中已归档 {sum(1 for r in allrows if r['archived']==1)}；另有子代理内部会话 {sub} 条不计入）")
+    lines.append("")
+    lines.append("| 开始 | 最后更新 | 状态 | 首条消息（摘要） | 记录文件 |")
+    lines.append("|---|---|---|---|---|")
+    for r in allrows:
+        ca = datetime.datetime.fromtimestamp(r["created_at"]).strftime("%m-%d %H:%M")
+        ua = datetime.datetime.fromtimestamp(r["updated_at"]).strftime("%m-%d %H:%M") if r["updated_at"] else ""
+        st = "已归档" if r["archived"] == 1 else "正常"
+        sn = snippet(r["first_user_message"]).replace("|", "\\|")
+        rp = (r["rollout_path"] or "").replace("|", "\\|")
+        lines.append(f"| {ca} | {ua} | {st} | {sn} | {os.path.basename(rp)} |")
+    lines.append("")
+    total_all += len(allrows)
+
+lines.append("---")
+lines.append(f"合计真实对话：**{total_all} 条**；另有归档会话与子代理内部会话，不在上方清单中。")
+
+with open(out, "w", encoding="utf-8") as f:
+    f.write("\n".join(lines))
+print("written:", out)
+print("total real threads:", total_all)

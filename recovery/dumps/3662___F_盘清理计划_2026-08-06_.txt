@@ -1,0 +1,98 @@
+# F 盘清理计划（2026-08-06）
+
+## 现状
+
+- F 盘总容量约 476 GB，已用 **472.1 GB**，仅剩 **3.7 GB**。
+- 单靠日常小清理不够，必须处理模型缓存、重复目录和旧备份。
+
+## 空间占用 Top 15（已实测）
+
+| 路径 | 大小 | 性质 |
+|---|---|---|
+| F:\Roaming\haolo_desktop（桌面智能体数据） | 80.8 GB | 会话/输出/运行时，其中 Obsidian知识库 21.1 GB 与 F:\Research 完全同构 |
+| F:\hf_cache | 73.0 GB | HuggingFace 模型缓存，含重复模型 |
+| F:\ComfyUI\models | 35.9 GB | 同一 SD1.5 模型的多种格式 |
+| F:\TMLR\Fusion\enwi_data | 24.1 GB | 约 13 万张 PNG 数据集 |
+| F:\_backup_20260720 | 28.0 GB | 7 月 20 日的整目录备份，内容与现有目录高度重复 |
+| F:\Research | 21.1 GB | 科研库本体（与 Obsidian知识库 重复） |
+| F:\agent to AGI + F:\agent to  AGI | 28.9 GB | 两个名字几乎相同的项目目录，疑似新旧重复 |
+| F:\Android | 16.3 GB | 模拟器系统镜像 + AVD 数据 |
+| F:\.workbuddy | 14.7 GB | 应用本体 8.4 GB + traces/logs 约 3 GB |
+| F:\blobs | 13.3 GB | Docker 镜像层 |
+| F:\pip_cache | 10.2 GB | 纯缓存，可全清 |
+| F:\texlive | 9.1 GB | TeX Live 安装（建议保留） |
+| F:\test | 8.2 GB | 实验运行输出（按日期命名） |
+| 回收站 $RECYCLE.BIN | 8.1 GB | 可立即清空 |
+| F:\uv_cache | 7.2 GB | 纯缓存，可全清 |
+| F:\新建文件夹 (2)\Modex-MH-Agent | 7.0 GB | Modex 安装目录（另有 1.3 GB 安装包在网盘下载目录） |
+| F:\Temp | 5.9 GB | 临时文件 |
+
+## 第一阶段：无风险清理（预计回收 35–40 GB）
+
+> 这些都可以直接做，不涉及个人数据。
+
+1. **清空回收站**：+8.1 GB（F:\$RECYCLE.BIN）
+2. **清 pip 缓存**：+10.2 GB
+   ```powershell
+   pip cache purge
+   ```
+3. **清 uv 缓存**：+7.2 GB
+   ```powershell
+   uv cache clean
+   ```
+4. **清临时目录**：+5.9 GB（F:\Temp，跳过正在使用的文件）
+5. **删网盘下载目录里的安装包/补丁**：+2.1 GB（F:\BaiduNetdiskDownload，如 Modex 安装包 1.3 GB、typora 补丁、Tableau 安装包——均已装过或可用网盘重新下载）
+
+## 第二阶段：确认后清理（预计回收 70–90 GB）
+
+1. **ComfyUI 只保留一种模型格式**：+25 GB 左右
+   - F:\ComfyUI\models\checkpoints 里是同一个 SD1.5 模型的多种副本：单个 safetensors、diffusers 整目录（unet 同时有 bin/safetensors/fp16 六份）、safety_checker 四份。
+   - 建议保留 `v1-5-pruned-emaonly.safetensors`（3.97 GB），其余先移入网盘再删。
+2. **HuggingFace 缓存去重**：+10–20 GB
+   - Qwen2.5-3B 同时存在于 F:\hf_cache\models 和 F:\hf_cache\hub（各 5.76 GB）。
+   - 检查不常用的 Mistral-7B（13.5 GB）、Hermes-3-3B（6 GB）等，不再用就删；使用 `huggingface_hub` 的 `scan_cache_dir` 可安全清理。
+3. **删除实验输出**：+8.2 GB（F:\test 下 2026-07/08 的按日期命名的运行产物；重要证据先压缩传网盘）
+4. **清理 WorkBuddy traces/logs**：+3 GB（F:\.workbuddy\traces、logs）
+5. **Docker 清理**：最多 +13 GB（`docker system prune -a`；或把 Docker 数据目录移到其他盘）
+6. **删除 TMLR\training\models\hf_cache**：+4.1 GB（与主缓存重复的模型副本）
+7. **卸载/删除 Modex**：+7 GB + 1.3 GB（不用就卸载；用就保留）
+8. **剪映、微信缓存清理**：+2–4 GB（在应用内清理缓存，不要直接删 F:\xwechat_files 的聊天文件）
+
+## 第三阶段：大额回收（预计回收 100–130 GB，重点配合百度网盘）
+
+1. **科研库只留一份**：+21 GB
+   - F:\Research 与 Haolo 数据里的 Obsidian知识库 内容几乎完全一样（同一套论文/实验/知识库结构）。
+   - 先确认哪个是正在用的，把另一份上传百度网盘后删除。
+2. **删除 7/20 整盘备份**：+28 GB
+   - F:\_backup_20260720 包含 research 20.2 GB、cow 6.7 GB、life-planner 1 GB。
+   - 验证现有项目正常后，将备份上传百度网盘再删本地。
+3. **合并两个 “agent to AGI” 目录**：+10–20 GB
+   - F:\agent to AGI（17.1 GB）与 F:\agent to  AGI（11.8 GB）名字几乎一样，里面是 agi-research-kit / agent-research-lab / review-agent。
+   - 确认新旧版本后保留一份，删除或归档另一份（.git 和 .venv 占了大部分）。
+4. **enwi_data 数据集归档**：+24 GB
+   - F:\TMLR\Fusion\enwi_data 有 13 万张 PNG（22.9 GB）。压缩后传百度网盘，本地只留清单。
+5. **Android 模拟器镜像**：+14 GB
+   - F:\Android\system-images 8.2 GB + .android 6.1 GB。近期不做安卓开发就把模拟器镜像卸载（SDK Manager 可随时重下）。
+6. **不常用的桌面智能体组数据**：+30–40 GB
+   - agent 组输出约 27.5 GB、归档组约 9 GB。确认不再需要后通过应用内归档/手动搬移到网盘。
+
+## 百度网盘使用策略
+
+- 网盘适合放：安装包、旧备份、实验输出、PNG 数据集、不常用的模型。
+- 网盘不适合放：正在用的代码仓库（同步冲突多）、需要高频读取的大模型权重（下载回来更费劲）。
+- 大模型权重优先考虑：**删除后需要时重新下载**（HuggingFace 可重下），或移到其他磁盘，而不是传网盘。
+- 操作顺序建议：先传网盘并**验证文件完整可下载**，再删本地；不要先删后传。
+
+## 执行顺序建议
+
+1. 跑第一阶段（纯缓存/回收站/临时文件），立即释放 35–40 GB。
+2. 处理 ComfyUI 重复模型和 hf_cache 去重（第二阶段大头）。
+3. 上传并删除备份/重复目录（第三阶段，耗时最长，建议后台挂网盘）。
+4. 长期：把 pip/uv/HuggingFace 缓存目录环境变量指到其他盘，避免 F 盘再次被塞满。
+
+## 不建议动的
+
+- F:\texlive（LaTeX 环境，9 GB，重装成本高）
+- F:\Roaming\haolo_desktop 里的会话记录（只清理明确的输出/归档，不删会话本身）
+- 当前正在用的科研项目本体（F:\Research 或 Obsidian知识库 之一）
+- 各种 Python 环境（train_env / exllama_env 等可保留，装一次也要时间）

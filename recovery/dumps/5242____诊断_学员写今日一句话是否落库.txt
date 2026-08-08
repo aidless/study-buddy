@@ -1,0 +1,100 @@
+// 诊断：学员写今日一句话是否落库
+import { readFileSync } from 'node:fs'
+const summary = JSON.parse(readFileSync('C:/Users/Administrator/AppData/Roaming/haolo_desktop/thread-groups/default/科研/outputs/emu-deep-test/summary.json', 'utf-8'))
+const email = summary.accounts.student
+const pass = summary.accounts.password
+let envUrl = '', envKey = ''
+for (const line of readFileSync('F:/test/2026-07-31-21-50-31/study-buddy/.env', 'utf-8').split(/\r?\n/)) {
+  const s = line.trim()
+  if (s.startsWith('VITE_SUPABASE_URL=')) envUrl = s.slice(18)
+  if (s.startsWith('VITE_SUPABASE_ANON_KEY=')) envKey = s.slice(23)
+}
+
+const list = await (await fetch('http://127.0.0.1:9222/json', { signal: AbortSignal.timeout(8000) })).json()
+const t = list.find((x) => x.type === 'page') || list[0]
+const ws = new WebSocket(t.webSocketDebuggerUrl)
+await new Promise((res) => (ws.onopen = res))
+let id = 0
+const send = (m, p) => new Promise((res, rej) => {
+  const i = ++id
+  const to = setTimeout(() => rej(new Error('timeout ' + m)), 12000)
+  const h = (ev) => {
+    const d = JSON.parse(ev.data)
+    if (d.id === i) { clearTimeout(to); ws.removeEventListener('message', h); d.error ? rej(new Error(d.error.message)) : res(d.result) }
+  }
+  ws.addEventListener('message', h)
+  ws.send(JSON.stringify({ id: i, method: m, params: p }))
+})
+const errors = []
+ws.addEventListener('message', (ev) => {
+  const d = JSON.parse(ev.data)
+  if (d.method === 'Runtime.exceptionThrown') errors.push('EXC: ' + (d.params.exceptionDetails.text || '') + ' ' + (d.params.exceptionDetails.exception?.description || '').slice(0, 200))
+  if (d.method === 'Runtime.consoleAPICalled' && d.params.type === 'error') errors.push('CONSOLE: ' + d.params.args.map((a) => a.value || a.description || '').join(' ').slice(0, 200))
+})
+await send('Runtime.enable')
+const evalJs = async (expression) => {
+  const r = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true })
+  return r.result.value
+}
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+// 若当前是督学页，先退出到登录
+const body0 = await evalJs('document.body.innerText')
+if (!body0.includes('考研长线陪伴')) {
+  await evalJs(`(() => { const b = Array.from(document.querySelectorAll('button')).find(x => x.textContent.trim() === '退出'); if (b) b.click(); return !!b })()`)
+  await sleep(3000)
+}
+// 登录学员
+await evalJs(`(() => {
+  const els = Array.from(document.querySelectorAll('input'))
+  const e = els.find(x => (x.placeholder || '').startsWith('you@example.com') && x.type === 'email' && x.offsetParent !== null)
+  const p = els.find(x => (x.placeholder || '').startsWith('至少 6 位'))
+  const set = (el, v) => { Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set.call(el, v); el.dispatchEvent(new Event('input', { bubbles: true })) }
+  if (e && p) { set(e, ${JSON.stringify(email)}); set(p, ${JSON.stringify(pass)}) }
+  return !!(e && p)
+})()`)
+await sleep(500)
+await evalJs(`(() => { const b = Array.from(document.querySelectorAll('button')).find(x => x.textContent.trim() === '进入'); if (b) b.click(); return !!b })()`)
+await sleep(8000)
+const body1 = await evalJs('document.body.innerText.slice(0, 300)')
+console.log('AFTER-LOGIN:', JSON.stringify(body1.slice(0, 120)))
+
+// 写今日一句话
+const typed = await evalJs(`(() => {
+  const els = Array.from(document.querySelectorAll('input, textarea'))
+  const el = els.find(x => (x.placeholder || '').startsWith('比如：今天数学卡住了'))
+  if (!el) return 'notfound'
+  Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set.call(el, '诊断词-模拟机-落库测试')
+  el.dispatchEvent(new Event('input', { bubbles: true }))
+  return el.value
+})()`)
+console.log('TYPED:', typed)
+await sleep(3000)
+
+const val = await evalJs(`(() => { const els = Array.from(document.querySelectorAll('textarea')); const el = els.find(x => (x.placeholder || '').startsWith('比如：今天数学卡住了')); return el ? el.value : 'no-ta' })()`)
+console.log('TEXTAREA-VALUE:', val)
+
+// 从 localStorage 拿会话 token，直查云端
+const token = await evalJs(`(() => {
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i)
+    if (k && k.includes('auth-token')) { try { return JSON.parse(localStorage.getItem(k)).access_token } catch {} }
+  }
+  return null
+})()`)
+console.log('TOKEN:', token ? token.slice(0, 20) + '...' : null)
+const rest = await evalJs(`(async () => {
+  const url = location.origin === 'https://appassets.androidplatform.net' ? null : null
+  return { origin: location.origin }
+})()`)
+console.log('ORIGIN:', JSON.stringify(rest))
+
+const query = await evalJs(`(async () => {
+  const token = (() => { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.includes('auth-token')) { try { return JSON.parse(localStorage.getItem(k)).access_token } catch {} } } return null })()
+  if (!token) return { err: 'no token' }
+  const r = await fetch(${JSON.stringify(envUrl.replace(/\/$/, ''))} + '/rest/v1/encouragements?select=kind,message,at&kind=eq.word&limit=10', { headers: { apikey: ${JSON.stringify(envKey)}, Authorization: 'Bearer ' + token } })
+  return { status: r.status, body: await r.text() }
+})()`)
+console.log('REST:', JSON.stringify(query).slice(0, 600))
+console.log('ERRORS:', JSON.stringify(errors.slice(0, 10)))
+ws.close()

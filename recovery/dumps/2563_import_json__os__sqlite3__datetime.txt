@@ -1,0 +1,53 @@
+import json, os, sqlite3, datetime
+
+ledger_path = r"C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-continuation-transactions.json"
+with open(ledger_path, "r", encoding="utf-8") as f:
+    ledger = json.load(f)
+
+records = list(ledger.get("bySourceThreadId", {}).values())
+print("ledger records:", len(records))
+
+# build thread id -> (group, created, updated, source) map from all groups
+base = r"C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default"
+thread_map = {}
+for gname, folder in [("默认分组", "haolo-ai-home"), ("论文", "论文"), ("科研", "科研"), ("agent", "agent"), ("app", "app")]:
+    db = os.path.join(base, folder, "haolo-ai-home", "state_5.sqlite")
+    if not os.path.exists(db):
+        continue
+    con = sqlite3.connect("file:"+db.replace("\\","/")+"?mode=ro", uri=True)
+    rows = con.execute("SELECT id, created_at, updated_at, archived, thread_source, source FROM threads").fetchall()
+    for r in rows:
+        thread_map[r[0]] = {"group": gname, "created": r[1], "updated": r[2], "archived": r[3], "sub": r[4], "source": r[5]}
+    con.close()
+
+print()
+print("=== ledger records referencing known threads ===")
+for rec in records:
+    src = rec.get("sourceThreadId")
+    tgt = rec.get("targetThreadId")
+    tgts = rec.get("targetThreadIds") or []
+    all_ids = [src] + ([tgt] if tgt else []) + list(tgts)
+    known = [t for t in all_ids if t in thread_map]
+    if not known:
+        continue
+    info = []
+    for t in known:
+        m = thread_map[t]
+        ca = datetime.datetime.fromtimestamp(m["created"]).strftime("%m-%d") if m["created"] else "?"
+        info.append(f"{t[:13]}[{m['group']} {ca} arch={m['archived']} sub={m['sub']}]")
+    print(f"status={rec.get('status')!r} cleanup={rec.get('cleanupStatus')!r} updated={rec.get('updatedAt')!r}")
+    print(f"   src={rec.get('sourceThreadId')} tgt={rec.get('targetThreadId')} targets={rec.get('targetThreadIds')}")
+    print(f"   KNOWN: {info}")
+
+print()
+print("=== agent group real threads NOT in ledger ===")
+agent_ids = {tid: m for tid, m in thread_map.items() if m["group"] == "agent" and not m["sub"]}
+ledger_ids = set()
+for rec in records:
+    ledger_ids.add(rec.get("sourceThreadId"))
+    if rec.get("targetThreadId"):
+        ledger_ids.add(rec["targetThreadId"])
+    ledger_ids.update(rec.get("targetThreadIds") or [])
+for tid, m in sorted(agent_ids.items(), key=lambda x: x[1]["created"]):
+    ca = datetime.datetime.fromtimestamp(m["created"]).strftime("%m-%d %H:%M")
+    print(f"   {tid[:13]} {ca} in_ledger={tid in ledger_ids} arch={m['archived']}")

@@ -1,0 +1,38 @@
+// 临时调试：guest 模式直接进试卷模式，dump DOM 状态
+import puppeteer from 'puppeteer-core'
+const EDGE = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+const URL = 'http://127.0.0.1:4173/?guest=student'
+const browser = await puppeteer.launch({ executablePath: EDGE, headless: 'new', args: ['--no-sandbox', '--disable-gpu'] })
+const page = await browser.newPage()
+await page.setViewport({ width: 412, height: 915, isMobile: true, hasTouch: true })
+page.on('pageerror', (e) => console.log('PAGEERROR', e.message))
+await page.goto(URL, { waitUntil: 'networkidle0', timeout: 60000 })
+await new Promise((r) => setTimeout(r, 1500))
+const click = async (t) => {
+  const r = await page.evaluate((txt) => {
+    const b = Array.from(document.querySelectorAll('button')).find((x) => x.textContent.trim() === txt || x.textContent.includes(txt))
+    if (b) { b.click(); return b.textContent.trim() }
+    return null
+  }, t)
+  console.log('click', t, '=>', r)
+  await new Promise((r2) => setTimeout(r2, 1200))
+}
+await click('备考')
+await click('展开 408 题库')
+await new Promise((r) => setTimeout(r, 2500))
+await click('试卷模式')
+const dump = await page.evaluate(() => {
+  const sel = document.querySelector('select')
+  return {
+    hasSelect: !!sel,
+    selectValue: sel ? sel.value : null,
+    options: sel ? Array.from(sel.options).map((o) => o.value + ':' + o.textContent) : [],
+    aButtons: Array.from(document.querySelectorAll('button')).filter((b) => b.textContent.trim().startsWith('A.')).length,
+    bodyHasPaperNote: document.body.innerText.includes('选择年份'),
+    bodyHasBankNote: document.body.innerText.includes('真题库共'),
+    snippet: document.body.innerText.slice(0, 400)
+  }
+})
+console.log(JSON.stringify(dump, null, 2))
+await page.screenshot({ path: 'C:/Users/Administrator/AppData/Roaming/haolo_desktop/thread-groups/default/科研/outputs/user-e2e/debug-paper.png' })
+await browser.close()
