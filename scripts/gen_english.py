@@ -130,9 +130,9 @@ for i in range(30):
     p = passages[i % len(passages)]
     stem_text, q_text, opts, ana = p
     if i >= len(passages):
-        # 变化措辞生成更多
-        stem_text = stem_text.replace('The', 'One')
-        q_text = q_text.replace('According to the passage', 'Based on the passage')
+        # 复用段落，变换问句措辞（不动原文）
+        q_text = 'What does the passage suggest? ' + ana
+        stem_text = stem_text
     qs.append(mk(f'pg_en_r{i:03d}', '阅读', f'Passage: {stem_text}\nQuestion: {q_text}',
                  opts[:4], 'A', ana, ['阅读']))
 

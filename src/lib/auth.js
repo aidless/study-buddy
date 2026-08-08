@@ -3,6 +3,7 @@ import { supabase, USE_SUPABASE, uid, genCode, LS } from './_util.js'
 
 export async function register({ email, password, name, role, coupleCode }) {
   if (USE_SUPABASE) {
+    profileCache = null; profileCacheAt = 0
     const { data, error } = await supabase.auth.signUp({ email, password })
     if (error) throw new Error(error.message)
     if (!data.session) {
@@ -47,6 +48,7 @@ export async function register({ email, password, name, role, coupleCode }) {
 
 export async function signIn({ email, password }) {
   if (USE_SUPABASE) {
+    profileCache = null; profileCacheAt = 0
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw new Error(error.message)
     return await loadProfile()
@@ -57,6 +59,7 @@ export async function signIn({ email, password }) {
 }
 
 export async function signOut() {
+  profileCache = null; profileCacheAt = 0
   if (USE_SUPABASE) {
     await supabase.auth.signOut()
   } else {

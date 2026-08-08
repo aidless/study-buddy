@@ -176,7 +176,7 @@ export default function QuizTest({ subject, topic, onClose }) {
                         return (
                           <div key={qq.id} className={`quiz-result-row ${ok ? '' : 'no'}`}>
                             <span className="quiz-result-ic"><Icon name={ok ? 'check' : 'close'} size={13} /></span>
-                            <span className="quiz-result-t">{i + 1}. {qq.tags?.[0] || qq.type} · {qq.year || '练习'}</span>
+                            <span className="quiz-result-t">{i + 1}. {qq.tags?.[0] || qq.type} · {qq.source === 'practice' ? '模拟练习' : (qq.year + ' 年真题')}</span>
                             <span className="quiz-result-type">{qq.type}</span>
                           </div>
                         )
