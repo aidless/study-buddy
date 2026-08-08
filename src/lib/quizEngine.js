@@ -2,8 +2,8 @@
 import { SEED_QUESTIONS } from './qbankSeed.js'
 import { ESSAY } from './qbankEssay.js'
 import { PRACTICE } from './qbankPractice.js'
-import { ENGLISH } from './qbankEnglish.js'
-import { MATH } from './qbankMath.js'
+import { ENGLISH, ENGLISH_WRITING } from './qbankEnglish.js'
+import { MATH, MATH_PROBLEMS } from './qbankMath.js'
 import { CODE_ENRICH } from './qbankCodeEnrich.js'
 
 const CODE_SUBJECT_MAP = { ds: '数据结构', co: '计算机组成', os: '操作系统', net: '计算机网络' }
@@ -16,7 +16,9 @@ export function buildQuizPool(includePractice = true) {
   if (includePractice) {
     for (const q of PRACTICE) pool.push({ ...q, source: 'practice' })
     for (const q of ENGLISH) pool.push({ ...q, source: 'practice' })
+    for (const q of ENGLISH_WRITING) pool.push({ ...q, source: 'practice' })
     for (const q of MATH) pool.push({ ...q, source: 'practice' })
+    for (const q of MATH_PROBLEMS) pool.push({ ...q, source: 'practice' })
   }
   return pool
 }

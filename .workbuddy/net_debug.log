@@ -1,0 +1,169 @@
+start
+REQ POST /rest/v1/couples
+
+REQ OPTIONS /rest/v1/couples
+
+RES 200 /rest/v1/couples
+
+RES 201 /rest/v1/couples
+
+REQ POST /rest/v1/profiles
+
+REQ OPTIONS /rest/v1/profiles
+
+RES 200 /rest/v1/profiles
+
+RES 201 /rest/v1/profiles
+
+REQ GET /rest/v1/profiles?select=*&id=eq.52ad66ec-e7c7-4e7d-afb5-64b0dc381c2b
+
+REQ OPTIONS /rest/v1/profiles?select=*&id=eq.52ad66ec-e7c7-4e7d-afb5-64b0dc381c2b
+
+RES 200 /rest/v1/profiles?select=*&id=eq.52ad66ec-e7c7-4e7d-afb5-64b0dc381c2b
+
+RES 200 /rest/v1/profiles?select=*&id=eq.52ad66ec-e7c7-4e7d-afb5-64b0dc381c2b
+
+REQ OPTIONS /rest/v1/tasks?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=created_at.asc
+
+REQ GET /rest/v1/tasks?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=created_at.asc
+
+REQ GET /rest/v1/encouragements?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&kind=eq.word&at=gte.2026-08-07T16%3A00%3A00.000Z&at=lt.2026-08-08T16%3A00%3A00.000Z&limit=4
+
+REQ GET /rest/v1/countdown?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ GET /rest/v1/couples?select=exam_type&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ GET /rest/v1/focus_sessions?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=started_at.desc&limit=200
+
+REQ GET /rest/v1/checkins?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ OPTIONS /rest/v1/encouragements?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&kind=eq.word&at=gte.2026-08-07T16%3A00%3A00.000Z&at=lt.2026-08-08T16%3A00%3A00.000Z&limit=4
+
+REQ OPTIONS /rest/v1/countdown?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ OPTIONS /rest/v1/couples?select=exam_type&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ OPTIONS /rest/v1/focus_sessions?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=started_at.desc&limit=200
+
+REQ OPTIONS /rest/v1/checkins?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/encouragements?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&kind=eq
+
+RES 200 /rest/v1/couples?select=exam_type&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/countdown?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/tasks?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=created_at
+
+RES 200 /rest/v1/checkins?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/focus_sessions?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=s
+
+RES 200 /rest/v1/couples?select=exam_type&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/countdown?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ GET /rest/v1/couples?select=exam_type&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/focus_sessions?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=s
+
+RES 200 /rest/v1/tasks?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=created_at
+
+REQ GET /rest/v1/checkins?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&user_id=eq.52ad66ec-e7c7-4e7d-afb5-64b0dc381c2b&date=eq.2026-08-08
+
+REQ OPTIONS /rest/v1/checkins?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&user_id=eq.52ad66ec-e7c7-4e7d-afb5-64b0dc381c2b&date=eq.2026-08-08
+
+RES 200 /rest/v1/encouragements?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&kind=eq
+
+RES 200 /rest/v1/checkins?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+registered: true
+
+REQ GET /rest/v1/countdown?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ GET /rest/v1/phase_goals?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=due_date.asc
+
+REQ GET /rest/v1/self_tests?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=at.desc
+
+REQ GET /rest/v1/couples?select=exam_type&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ OPTIONS /rest/v1/phase_goals?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=due_date.asc
+
+REQ OPTIONS /rest/v1/self_tests?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=at.desc
+
+RES 200 /rest/v1/checkins?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&user_id=eq.52
+
+RES 200 /rest/v1/phase_goals?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=due_
+
+RES 200 /rest/v1/self_tests?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=at.de
+
+RES 200 /rest/v1/couples?select=exam_type&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ POST /rest/v1/countdown?on_conflict=couple_id
+
+REQ OPTIONS /rest/v1/countdown?on_conflict=couple_id
+
+RES 200 /rest/v1/countdown?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/checkins?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&user_id=eq.52
+
+REQ GET /rest/v1/countdown?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/countdown?on_conflict=couple_id
+
+RES 200 /rest/v1/phase_goals?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=due_
+
+RES 200 /rest/v1/self_tests?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=at.de
+
+RES 200 /rest/v1/couples?select=exam_type&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ GET /rest/v1/couples?select=target_score&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ GET /rest/v1/couples?select=subj_target&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ GET /rest/v1/wrong_items?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=created_at.desc
+
+REQ OPTIONS /rest/v1/couples?select=target_score&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ OPTIONS /rest/v1/couples?select=subj_target&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ OPTIONS /rest/v1/wrong_items?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=created_at.desc
+
+RES 200 /rest/v1/countdown?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 201 /rest/v1/countdown?on_conflict=couple_id
+
+RES 200 /rest/v1/couples?select=target_score&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/couples?select=subj_target&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/wrong_items?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=crea
+
+RES 200 /rest/v1/couples?select=subj_target&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/wrong_items?select=*&couple_id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0&order=crea
+
+RES 200 /rest/v1/couples?select=target_score&id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+--- 点击 保存单科目标 ---
+
+REQ GET /rest/v1/profiles?select=*&id=eq.52ad66ec-e7c7-4e7d-afb5-64b0dc381c2b
+
+RES 200 /rest/v1/profiles?select=*&id=eq.52ad66ec-e7c7-4e7d-afb5-64b0dc381c2b
+
+REQ PATCH /rest/v1/couples?id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ OPTIONS /rest/v1/couples?id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 200 /rest/v1/couples?id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 204 /rest/v1/couples?id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+REQ PATCH /rest/v1/couples?id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+RES 204 /rest/v1/couples?id=eq.0f55a5fa-9f63-4c66-b1c3-66da476d7ee0
+
+--- 点击 保存(目标总分) ---
+
+done
+

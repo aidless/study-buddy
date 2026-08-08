@@ -76,7 +76,7 @@ export default function Plan({ nonce }) {
             </div>
             {err && <div className="err">{err}</div>}
             <div className="form-row" style={{ marginTop: 10 }}>
-              <button className="btn block" onClick={saveCd}>保存</button>
+              <button className="btn block" onClick={saveCd}>保存日期</button>
               {editingCd && <button className="btn ghost" onClick={() => setEditingCd(false)}>取消</button>}
             </div>
           </div>

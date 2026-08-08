@@ -1,0 +1,11 @@
+start
+registered: true
+
+fill 政治: ok
+fill 英语: ok
+fill 数学: ok
+fill 408: ok
+before save: []
+
+after return: [{"ph":"满分 500","val":""},{"ph":"满分 100","val":""},{"ph":"满分 100","val":""},{"ph":"满分 150","val":""},{"ph":"满分 150","val":""}]
+
