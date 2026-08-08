@@ -2,6 +2,7 @@
 import { useState, lazy, Suspense } from 'react'
 import Icon from './Icon'
 import { addSelfTest } from '../lib/db'
+import EssayScorer from './EssayScorer'
 
 const QuizTest = lazy(() => import('./QuizTest'))
 
@@ -10,6 +11,7 @@ export default function SubjectSelfTest({ subject, bank, intro }) {
   const [openId, setOpenId] = useState(null)
   const [marks, setMarks] = useState({})
   const [quiz, setQuiz] = useState(false)
+  const [scorerQ, setScorerQ] = useState(null)
   const [savedMsg, setSavedMsg] = useState('')
 
   const mark = async (q, ok) => {
@@ -48,10 +50,16 @@ export default function SubjectSelfTest({ subject, bank, intro }) {
               <div key={q.id} className="card" style={{ padding: 12 }}>
                 <div className="tiny" style={{ color: 'var(--primary)', fontWeight: 700, marginBottom: 4 }}>{(q.tags || []).join(' · ')}</div>
                 <div style={{ fontSize: 13.5, lineHeight: 1.7 }}>{q.stem}</div>
-                <div className="row" style={{ gap: 8, marginTop: 10 }}>
+                <div className="row" style={{ gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
                   <button className="mini-toggle" onClick={() => setOpenId(open ? null : q.id)}>{open ? '收起参考答案' : '看参考答案'}</button>
-                  <button className={`chip ${marks[q.id] === true ? 'on' : ''}`} style={{ borderColor: 'var(--primary)' }} onClick={() => mark(q, true)}>写/做得不错</button>
-                  <button className={`chip ${marks[q.id] === false ? 'on' : ''}`} style={{ borderColor: 'var(--tomato)' }} onClick={() => mark(q, false)}>还需练习</button>
+                  {subject === '英语一' ? (
+                    <button className="btn ghost" style={{ fontSize: 12, padding: '6px 12px' }} onClick={() => setScorerQ(q)}>开始评分</button>
+                  ) : (
+                    <>
+                      <button className={`chip ${marks[q.id] === true ? 'on' : ''}`} style={{ borderColor: 'var(--primary)' }} onClick={() => mark(q, true)}>做得不错</button>
+                      <button className={`chip ${marks[q.id] === false ? 'on' : ''}`} style={{ borderColor: 'var(--tomato)' }} onClick={() => mark(q, false)}>还需练习</button>
+                    </>
+                  )}
                 </div>
                 {open && (
                   <div className="quiz-ref" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>
@@ -63,6 +71,8 @@ export default function SubjectSelfTest({ subject, bank, intro }) {
           })}
         </div>
       )}
+
+      {scorerQ && <EssayScorer q={scorerQ} onClose={() => setScorerQ(null)} />}
 
       {quiz && (
         <Suspense fallback={null}>
