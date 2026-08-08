@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import Tasks from './Tasks'
 import Pomodoro from './Pomodoro'
 import Progress from './Progress'
@@ -9,10 +9,10 @@ import TodayWord from './TodayWord'
 import MoreTools from './MoreTools'
 import Mood from './Mood'
 import MemoryEcho from './MemoryEcho'
-import SelfTestModule from './SelfTestModule'
+const SelfTestModule = lazy(() => import('./SelfTestModule'))
 import ExamSwitcher from './ExamSwitcher'
 import Icon from './Icon'
-import { getCountdown, setCountdown, getExamType, setExamType, daysUntil, todayStr, LS, listFocusSession, listCheckin } from '../lib/db'
+import { getCountdown, setCountdown, getExamType, setExamType, daysUntil, todayStr, LS, listFocusSession, listCheckin, getCheckin } from '../lib/db'
 import MilestoneCelebrate from './MilestoneCelebrate'
 import { todayMilestone, markMilestoneSeen } from '../lib/milestonesPresenter.js'
 import { computeStreakFromFocusCheckins, focusStreakFromFocus } from '../lib/milestones.js'
@@ -67,6 +67,16 @@ export default function StudentView({ user, nonce, onSignOut }) {
       if (e.he) all.push(e.he)
     })
     setHistoryWords(all)
+    // 每日提醒：开了提醒且晚上还没打卡 → 弹系统通知（本地提醒，真推送需服务器）
+    ;(async () => { try {
+      if (typeof Notification !== 'undefined' && Notification.permission === 'granted' && localStorage.getItem('dx_remind') === '1' && new Date().getHours() >= 20) {
+        const ck = await getCheckin()
+        if (!ck && localStorage.getItem('dx_remind_today') !== todayStr()) {
+          localStorage.setItem('dx_remind_today', todayStr())
+          new Notification('督学', { body: '今天还没打卡——花 5 秒点一下，连续天数就接上了', icon: './icon.svg' })
+        }
+      }
+    } catch {} })()
     Promise.all([listFocusSession(), listCheckin()])
       .then(([focus, checkins]) => {
         setEchoData({ focus, checkins, words: m })
@@ -153,7 +163,7 @@ export default function StudentView({ user, nonce, onSignOut }) {
       )}
       {tab === 'focus' && <Pomodoro onChanged={changed} />}
       {tab === 'plan' && <Plan nonce={n} />}
-      {tab === 'selftest' && <SelfTestModule nonce={n} onLockChange={setExamLock} />}
+      {tab === 'selftest' && <Suspense fallback={<div className="card loading">题库加载中…</div>}><SelfTestModule nonce={n} onLockChange={setExamLock} /></Suspense>}
       {tab === 'progress' && <Progress nonce={n} onGoSelfTest={() => setTab('selftest')} />}
       {tab === 'chat' && <Chat nonce={n} />}
 

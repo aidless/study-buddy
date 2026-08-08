@@ -1,0 +1,23 @@
+start
+性能: domcontentloaded=137ms 首屏稳定=1641ms nav={"domContentLoaded":117,"load":118,"jsHeap":3}
+
+注册: OK
+
+Tab 专注: 渲染3019ms 内容147字
+
+Tab 备考: 渲染3035ms 内容424字
+
+Tab 自测: 渲染3034ms 内容164927字
+
+Tab 进度: 渲染3073ms 内容155字
+
+Tab 悄悄话: 渲染3023ms 内容104字
+
+考试: {"fullscreen":true,"choicesPerPage":4,"hasTimer":false}
+
+大题可达: true
+
+运行时问题数: 0
+
+done
+

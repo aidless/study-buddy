@@ -22,6 +22,7 @@ check('每科数量分布合理', ['数据结构', '计算机组成', '操作系
 check('大题总数 >= 80', ESSAY.length >= 80, 'essay=' + ESSAY.length)
 check('大题每年 7 道', ESSAY.filter((e) => e.stem && e.stem.length > 20).length >= 80, '')
 check('大题答案覆盖 >= 8 年', new Set(ESSAY.filter((e) => e.analysis && e.analysis.length > 20).map((e) => e.year)).size >= 8, '')
+check('政治练习 = 100', PRACTICE.length === 100, 'pol=' + PRACTICE.length)
 check('英语一练习 = 122', ENGLISH.length === 122, 'en=' + ENGLISH.length)
 check('数学一练习 = 126', MATH.length === 126, 'math=' + MATH.length)
 check('英语选项合法', ENGLISH.every((q) => q.options.length === 4 && 'ABCD'.includes(q.answer)), '')
