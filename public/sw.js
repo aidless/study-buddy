@@ -3,6 +3,7 @@ const VERSION = 'study-buddy-v2'
 const ASSET_CACHE = VERSION + '-assets'
 const SHELL_CACHE = VERSION + '-shell'
 
+self.addEventListener('message', (e) => { if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting() })
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(SHELL_CACHE).then((c) => c.addAll(['/', '/index.html', '/manifest.webmanifest'])).then(() => self.skipWaiting())
