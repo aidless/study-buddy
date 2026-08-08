@@ -1,0 +1,5 @@
+node_modules/
+dist/
+preview-run.log
+preview-run.log.err
+.env

@@ -1,0 +1,11 @@
+{
+  "name": "考研督学 · 督学",
+  "short_name": "督学",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f5f7f4",
+  "theme_color": "#2f9e6e",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

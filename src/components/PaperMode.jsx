@@ -206,8 +206,8 @@ export default function PaperMode({ onBack, onLockChange }) {
 
       {/* ============ 考试中（全屏） ============ */}
       {mode === 'exam' && cur && (
-        <div className="quiz-overlay" onClick={(e) => e.stopPropagation()}>
-          <div className="quiz-sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="quiz-overlay exam-overlay" onClick={(e) => e.stopPropagation()}>
+          <div className="quiz-sheet exam-sheet" onClick={(e) => e.stopPropagation()}>
             <div className="quiz-head">
               <div>
                 <div className="quiz-title">{source === 'random' ? '随机真题卷' : `${year} 年真题卷`}</div>

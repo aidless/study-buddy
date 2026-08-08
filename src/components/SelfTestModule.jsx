@@ -4,6 +4,7 @@
 import { lazy, Suspense } from 'react'
 import Icon from './Icon'
 import PaperMode from './PaperMode'
+import TutorAdvice from './TutorAdvice'
 
 const ExamQBank = lazy(() => import('./ExamQBank'))
 const LazyFallback = () => <div className="tiny" style={{ padding: 16, opacity: 0.6, textAlign: 'center' }}>题库加载中…</div>
@@ -19,6 +20,8 @@ export default function SelfTestModule({ nonce, onLockChange }) {
           成绩会自动进入<b>估分 / 薄弱分析 / 未来计划</b>。
         </div>
       </div>
+
+      <TutorAdvice />
 
       <PaperMode onBack={() => {}} onLockChange={onLockChange} />
 

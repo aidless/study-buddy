@@ -5,7 +5,8 @@ import SupervisorView from './components/SupervisorView'
 import { loadProfile, signOut, subscribe, USE_SUPABASE } from './lib/db'
 
 export default function App() {
-  const [user, setUser] = useState(undefined) // undefined = 鍔犺浇涓?  const [nonce, setNonce] = useState(0)
+  const [user, setUser] = useState(undefined)
+  const [nonce, setNonce] = useState(0)
 
   useEffect(() => {
     loadProfile().then((u) => setUser(u))
@@ -13,7 +14,7 @@ export default function App() {
 
   useEffect(() => {
     if (!user || !USE_SUPABASE) return
-    // 鎬ц兘浼樺寲锛氳疆璇粠 15s 闄嶅埌 60s锛屼笖鍙湪椤甸潰鍙鏃惰窇锛?    // Realtime 浜嬩欢鐢?rAF 鍚堝苟锛堝悓涓€甯у娆′簨浠跺彧鍒锋柊涓€娆★級锛屽垏鍥炲墠鍙版椂绔嬪埢琛ヤ竴娆″埛鏂般€?    let pending = false
+    let pending = false
     const bump = () => {
       if (document.hidden || pending) return
       pending = true
@@ -35,7 +36,7 @@ export default function App() {
     setUser(null)
   }
 
-  if (user === undefined) return <div className="app"><div className="empty loading">鍔犺浇涓€?/div></div>
+  if (user === undefined) return <div className="app"><div className="empty loading">加载中…</div></div>
   if (!user) return <Login onAuth={(u) => setUser(u)} />
 
   return user.role === 'supervisor' ? (
