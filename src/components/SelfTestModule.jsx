@@ -6,6 +6,7 @@ import Icon from './Icon'
 import PaperMode from './PaperMode'
 import TutorAdvice from './TutorAdvice'
 import SubjectSelfTest from './SubjectSelfTest'
+import AiTutor from './AiTutor'
 import { ENGLISH_WRITING } from '../lib/qbankEnglish.js'
 import { MATH_PROBLEMS } from '../lib/qbankMath.js'
 
@@ -29,6 +30,8 @@ export default function SelfTestModule({ nonce, onLockChange }) {
           ))}
         </div>
       </div>
+
+      <AiTutor />
 
       {mode === '408' && (
         <>
