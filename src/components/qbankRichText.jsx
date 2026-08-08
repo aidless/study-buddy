@@ -13,14 +13,12 @@ export function Fig({ id, style }) {
   if (fig.slices && fig.slices.length === 4) {
     return (
       <div style={{ marginTop: 8, ...style }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-          {fig.slices.map((s, i) => (
-            <div key={i}>
-              <div className="tiny" style={{ fontWeight: 700, color: 'var(--primary)', marginBottom: 4 }}>选项 {LETTERS[i]}</div>
-              <div className="qfig" dangerouslySetInnerHTML={{ __html: s }} />
-            </div>
-          ))}
-        </div>
+        {fig.slices.map((s, i) => (
+          <div key={i} style={{ marginBottom: 8 }}>
+            <div className="tiny" style={{ fontWeight: 700, color: 'var(--primary)', marginBottom: 4 }}>选项 {LETTERS[i]}</div>
+            <div className="qfig" dangerouslySetInnerHTML={{ __html: s }} />
+          </div>
+        ))}
       </div>
     )
   }
