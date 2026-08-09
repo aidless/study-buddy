@@ -8,7 +8,9 @@
       "appId": "com.haolo.studybuddy",
       "apiKey": "CHANGE_ME",
       "version": "0.1.1",
-      "updateUrl": "https://cfxsyvbxnmvmspklebfa.functions.supabase.co/capgo-proxy/updates"
+      "updateUrl": "https://cfxsyvbxnmvmspklebfa.functions.supabase.co/updates",
+      "statsUrl": "https://cfxsyvbxnmvmspklebfa.functions.supabase.co/updates/stats",
+      "channelUrl": "https://cfxsyvbxnmvmspklebfa.functions.supabase.co/updates/channel_self"
     }
   }
 }
