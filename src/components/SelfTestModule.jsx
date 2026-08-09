@@ -17,7 +17,7 @@ export default function SelfTestModule({ nonce, onLockChange }) {
   const [mode, setMode] = useState('408') // 408 | 英语一 | 数学一
 
   return (
-    <div key={nonce}>
+    <div>
       <div className="card" style={{ background: 'var(--primary-soft)', borderColor: 'transparent' }}>
         <h2><span className="dot" /> 自测</h2>
         <div className="tiny" style={{ lineHeight: 1.7 }}>
