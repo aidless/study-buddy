@@ -111,3 +111,77 @@ INFO         |   androidboot.vbmeta.size=6592
 INFO         |   androidboot.veritymode=enforcing
 WHPX on Windows 10.0.26200 detected.
 Windows Hypervisor Platform accelerator is operational
+INFO         | Monitoring duration of emulator setup.
+WARNING      | The emulator now requires a signed jwt token for gRPC access! Use the -grpc flag if you really want an open unprotected grpc port
+INFO         | Using security allow list from: F:\Android\emulator\lib\emulator_access.json
+INFO         | The active JSON Web Key Sets can be found here: C:\Users\Administrator\AppData\Local\Temp\avd\running\18032\jwks\386ca17d-ae2a-49a5-82b7-f792d6d4f5ee\active.jwk
+INFO         | Scanning C:\Users\Administrator\AppData\Local\Temp\avd\running\18032\jwks\386ca17d-ae2a-49a5-82b7-f792d6d4f5ee for jwk keys.
+INFO         | Started GRPC server at 127.0.0.1:8554, security: Local, auth: +token
+INFO         | Advertising in: C:\Users\Administrator\AppData\Local\Temp\avd\running\pid_18032.ini
+INFO         | Successfully initialized netsim WiFi
+INFO         | Activated packet streamer for bluetooth emulation
+INFO         | Setting display: 0 configuration to: 320x480, dpi: 160x160 
+INFO         | setDisplayActiveConfig: id:0, 320x480
+INFO         | emulatorSetupEnvironment: Environment scene is not required
+INFO         | Boot completed in 92205 ms
+INFO         | Increasing screen off timeout, logcat buffer size to 2M.
+INFO         | IPv4 server found: 192.168.2.1
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0f5:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0f5:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0f5:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: e8fb:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 200b:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 200b:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 200b:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 811:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 811:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 811:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 17:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 17:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 17:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: e81c:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: e81c:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: e81c:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 8024:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 8024:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 8024:9daf:d601:0:10ea:9caf:d601:0
+INFO         | IPv4 server found: 192.168.2.1
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0f5:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0f5:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0f5:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: e8fb:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 200b:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 200b:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 200b:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 811:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 811:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 811:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 17:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 17:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 17:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: e81c:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: e81c:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: e81c:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 8024:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 8024:9daf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 8024:9daf:d601:0:10ea:9caf:d601:0
+INFO         | IPv4 server found: 192.168.2.1
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: 10ea:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+INFO         | Ignore IPv6 address: f0:9caf:d601:0:10ea:9caf:d601:0
+IN
