@@ -1,6 +1,7 @@
 // usePomodoro.js —— 番茄钟状态机：计时 / 锁 / 退出关卡 / 完成记录
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { LS } from './_util.js'
+import { hasNativeLockSupport, enableNativeLock, disableNativeLock } from './nativeLock.js'
 import { addFocusSession, getPartnerLive } from './db.js'
 
 const readNum = (k, d) => { const v = parseInt(LS.get(k, String(d)), 10); return Number.isFinite(v) && v > 0 ? v : d }
@@ -17,8 +18,8 @@ export function usePomodoro(onChanged) {
   const [lock, setLock] = useState(false)
   const [lockMode, setLockMode] = useState('soft')
   const [lockStatus, setLockStatus] = useState('')
-  const [hardAvailable] = useState(false)
-  const [hasNativeLock] = useState(false)
+  const [hardAvailable] = useState(() => hasNativeLockSupport())
+  const [hasNativeLock] = useState(() => hasNativeLockSupport())
   const [partnerFocus, setPartnerFocus] = useState(false)
   const [showStartSheet, setShowStartSheet] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
@@ -62,6 +63,7 @@ export function usePomodoro(onChanged) {
   const complete = async () => {
     const sec = workSec - Math.max(0, left - 1) > 0 ? Math.min(workSec, sessionRef.current?.elapsed || workSec) : workSec
     await persist(sec, null, 'done')
+    await unlock()
     setRunning(false)
     setLock(false)
     setMode('break')
@@ -73,6 +75,12 @@ export function usePomodoro(onChanged) {
   const reallyStart = async (useLock, isHard, unlimited) => {
     setLock(!!useLock)
     setLockMode(isHard ? 'hard' : 'soft')
+    if (useLock && hasNativeLockSupport()) {
+      const ok = await enableNativeLock()
+      setLockStatus(ok ? '系统已锁定屏幕' : '系统未开启屏幕固定，已退回软锁：设置→安全→屏幕固定')
+    } else {
+      setLockStatus('')
+    }
     setNoLimit(!!unlimited)
     setRunning(true)
     setMode('work')
@@ -83,6 +91,7 @@ export function usePomodoro(onChanged) {
   }
 
   const reset = () => {
+    unlock()
     setRunning(false); setLock(false); setMode('work'); setLeft(workSec); setPendingExit(null); setShowExitGate(false)
   }
 
@@ -109,10 +118,11 @@ export function usePomodoro(onChanged) {
     setShowExitGate(false)
     const kind = pendingExit
     setPendingExit(null)
-    if (kind === 'giveUp') { await doGiveUp() } else { setRunning(false); setLock(false) }
+    if (kind === 'giveUp') { await doGiveUp() } else { await unlock(); setRunning(false); setLock(false) }
   }
 
   const saveReflection = async (text) => {
+    await unlock()
     if (text && text.trim()) {
       try { await addFocusSession({ durationSec: 0, taskId: null, status: 'done', note: text.trim() }) } catch {}
     }
@@ -121,6 +131,10 @@ export function usePomodoro(onChanged) {
     setMode('work'); setLeft(workSec)
   }
 
+
+  const unlock = async () => {
+    if (hasNativeLockSupport()) await disableNativeLock()
+  }
   const openLockSettings = () => setShowOwnerHelp(true)
 
   return {
