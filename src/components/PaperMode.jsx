@@ -10,6 +10,7 @@ import Icon from './Icon'
 import { SEED_QUESTIONS } from '../lib/qbankSeed.js'
 import { ESSAY } from '../lib/qbankEssay.js'
 import { addSelfTest } from '../lib/db'
+import { Fig } from './qbankRichText'
 
 // 套卷选择题按题号归科（408 统考固定区间）
 const PAPER_SUBJECT = (no) =>

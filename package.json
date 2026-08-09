@@ -12,12 +12,15 @@
     "verify:enrich": "node .workbuddy/qbank_verify_enrich.mjs"
   },
   "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/core": "^6.2.1",
     "@mediapipe/tasks-vision": "^1.0.1",
     "@supabase/supabase-js": "^2.45.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^6.2.1",
     "@vitejs/plugin-react": "^4.3.2",
     "puppeteer-core": "^25.5.0",
     "vite": "^5.4.8"
