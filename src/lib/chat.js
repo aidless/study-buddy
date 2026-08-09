@@ -39,3 +39,18 @@ export async function sendEncouragement({ message, toId }) {
   all.push({ id: uid(), coupleId: me.coupleId, fromId: me.id, message, at: new Date().toISOString() })
   LS.set('dx_cheers', all)
 }
+
+export async function listCheers() {
+  const me = await loadProfile()
+  if (!me) return []
+  if (USE_SUPABASE) {
+    const { data } = await supabase.from('encouragements').select('*')
+      .eq('couple_id', me.coupleId).eq('kind', 'cheer').order('at', { ascending: false }).limit(5)
+    return (data || []).map((r) => ({
+      id: r.id, fromId: r.from_id, fromName: r.from_name, text: r.message, at: r.at, mine: r.from_id === me.id
+    }))
+  }
+  return LS.get('dx_cheers', []).filter((c) => c.coupleId === me.coupleId)
+    .map((c) => ({ id: c.id, fromId: c.fromId, fromName: c.fromName, text: c.message, at: c.at, mine: c.fromId === me.id }))
+    .sort((a, b) => (b.at || '').localeCompare(a.at || ''))
+}

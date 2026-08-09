@@ -60,10 +60,16 @@ export async function signIn({ email, password }) {
 
 export async function signOut() {
   profileCache = null; profileCacheAt = 0
-  if (USE_SUPABASE) {
-    await supabase.auth.signOut()
-  } else {
+  try {
+    if (USE_SUPABASE) {
+      await supabase.auth.signOut()
+    } else {
+      LS.set('dx_user', null)
+    }
+  } catch {
+    // 网络异常也要确保本地会话清掉，避免卡在登录态
     LS.set('dx_user', null)
+    try { supabase.auth.setSession({ access_token: '', refresh_token: '' }) } catch {}
   }
 }
 

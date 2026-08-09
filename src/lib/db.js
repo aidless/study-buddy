@@ -11,7 +11,7 @@ import { getStats, listFocusSession, listCheckin, subscribe } from './stats.js'
 import { wrongBookStats, radarData, weeklyCompare, computeSyncDays, computeStatsCore } from './planStats.js'
 import { getWords, setWord } from './words.js'
 import { buildPlan } from './curriculum.js'
-import { listMessages, sendMessage, sendEncouragement } from './chat.js'
+import { listMessages, sendMessage, sendEncouragement, listCheers } from './chat.js'
 import { sendRevive, getReviveDates } from './revive.js'
 import { listWrongItems, putWrongItem, removeWrongItem, setWrongMastered, redoWrongItem } from './wrongItemsHybrid.js'
 import { hasLocalData, migrateLocalToCloud, buildMigrationPlan } from './migrateLocalToCloud.js'
@@ -27,7 +27,7 @@ export {
   getAllExams, getActiveExam, getActiveExamId, setActiveExamId, addCustomExam, removeCustomExam,
   getStats, listFocusSession, listCheckin, subscribe,
   wrongBookStats, radarData, weeklyCompare, computeSyncDays,
-  getWords, setWord, listMessages, sendMessage, sendEncouragement,
+  getWords, setWord, listMessages, sendMessage, sendEncouragement, listCheers,
   sendRevive, getReviveDates,
   listWrongItems, putWrongItem, removeWrongItem, setWrongMastered, redoWrongItem,
   hasLocalData, migrateLocalToCloud, buildMigrationPlan,
@@ -165,17 +165,37 @@ export function getMoodLevel(date) {
     return Promise.resolve('')
   }
 }
-export function sheWantsPraise(date) {
+export async function sheWantsPraise(date) {
+  const me = await loadProfile()
   const d = date || todayStr()
+  if (USE_SUPABASE && me) {
+    try {
+      const { data } = await supabase.from('encouragements').select('id').eq('couple_id', me.coupleId).eq('kind', 'want_praise').eq('message', 'want_praise:' + d).limit(1)
+      if ((data || []).length > 0) return true
+    } catch {}
+  }
   try {
     const m = LS.get('dx_want_praise', {})
-    return Promise.resolve(!!m[d])
+    return !!m[d]
   } catch {
-    return Promise.resolve(false)
+    return false
   }
 }
-export function markWantPraise() {
+export async function markWantPraise() {
+  const me = await loadProfile()
+  const d = todayStr()
   const m = LS.get('dx_want_praise', {})
-  m[todayStr()] = true
+  m[d] = true
   LS.set('dx_want_praise', m)
+  if (USE_SUPABASE && me) {
+    try {
+      const { data: old } = await supabase.from('encouragements').select('id').eq('couple_id', me.coupleId).eq('kind', 'want_praise').eq('message', 'want_praise:' + d)
+      if ((old || []).length === 0) {
+        await supabase.from('encouragements').insert({
+          couple_id: me.coupleId, from_id: me.id, from_name: me.name, to_id: me.id,
+          message: 'want_praise:' + d, kind: 'want_praise'
+        })
+      }
+    } catch {}
+  }
 }

@@ -3,7 +3,7 @@ import Icon from './Icon'
 import Chat from './Chat'
 import ProgressStats from './ProgressStats'
 import TutorAdvice from './TutorAdvice'
-import { getPlan, getStats, getWords, setWord, sendEncouragement, loadProfile, getPartner, todayStr, getLiveStatus, getMoodLevel, sendRevive, sheWantsPraise, listFocusSession, listCheckin } from '../lib/db'
+import { getPlan, getStats, getWords, setWord, sendEncouragement, loadProfile, getPartner, todayStr, getLiveStatus, getMoodLevel, sendRevive, getReviveDates, sheWantsPraise, listCheckin } from '../lib/db'
 import WeeklyReport from './WeeklyReport'
 
 const QUICK_WORDS = ['今天也辛苦啦', '慢慢来，我一直在', '累了就歇会儿', '离目标又近一点']
@@ -20,6 +20,9 @@ export default function SupervisorView({ user, nonce, onSignOut }) {
   const [showStats, setShowStats] = useState(true)
   const [sent, setSent] = useState(false)
   const [moodHint, setMoodHint] = useState('')
+  const [wantsPraise, setWantsPraise] = useState(false)
+  const [reviveMsg, setReviveMsg] = useState('')
+  const [reviveSending, setReviveSending] = useState(false)
 
   const today = todayStr()
 
@@ -30,6 +33,7 @@ export default function SupervisorView({ user, nonce, onSignOut }) {
   }, [nonce, today])
 
   useEffect(() => { getLiveStatus().then(setLive).catch(() => {}) }, [nonce])
+  useEffect(() => { sheWantsPraise(today).then(setWantsPraise).catch(() => {}) }, [today, nonce])
   useEffect(() => { getMoodLevel(today).then((level) => {
     if (level === 'low') setMoodHint('她今天可能有点累，送句鼓励吧（只提示，不看她写了什么）')
     else if (level === 'mid') setMoodHint('她今天树洞里有些情绪，也有积极的话——她在自己调节')
@@ -39,6 +43,30 @@ export default function SupervisorView({ user, nonce, onSignOut }) {
   useEffect(() => { getWords(today).then((w) => { setSheWord(w.she || ''); setHeWord(w.he || '') }) }, [today, nonce])
 
   const onHeWord = (v) => { setHeWord(v); setWord(today, 'he', v) }
+  const localKey = (d) => { const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const dd = String(d.getDate()).padStart(2, '0'); return `${y}-${m}-${dd}` }
+  const sendReviveCard = async () => {
+    if (reviveSending) return
+    setReviveSending(true); setReviveMsg('')
+    try {
+      const p = await getPartner()
+      const checks = p ? (await listCheckin()).filter((c) => c.userId === p.id || c.user_id === p.id) : []
+      const revived = (await getReviveDates()) || []
+      const dates = new Set(checks.map((c) => c.date))
+      let target = null
+      for (let i = 1; i <= 7; i++) {
+        const d = new Date(); d.setDate(d.getDate() - i)
+        const key = localKey(d)
+        if (!dates.has(key) && !revived.includes(key)) { target = key; break }
+      }
+      if (target) {
+        await sendRevive({ forDate: target })
+        setReviveMsg(`已为她补上 ${target} 的打卡，连续天数接上了`)
+      } else {
+        setReviveMsg('她最近 7 天都打卡了，暂时用不上复活卡')
+      }
+    } catch { setReviveMsg('复活卡发送失败，稍后再试') }
+    setReviveSending(false)
+  }
   const encourage = async (msg) => {
     const p = await getPartner()
     if (!p) return
@@ -89,10 +117,17 @@ export default function SupervisorView({ user, nonce, onSignOut }) {
 
           <div className="card">
             <h2><span className="dot" /> 送她一句</h2>
+            {wantsPraise && (
+              <div className="tiny" style={{ color: 'var(--tomato)', fontWeight: 600, marginBottom: 8 }}>她今天想被夸 💛 快送她一句吧</div>
+            )}
             <div className="chips">
               {QUICK_WORDS.map((q) => <button key={q} className="chip" onClick={() => encourage(q)}>{q}</button>)}
             </div>
             {sent && <div className="tiny" style={{ color: 'var(--primary)', marginTop: 8 }}>已送达，她打开就能看到</div>}
+            <button className="mini-toggle" style={{ marginTop: 10 }} onClick={sendReviveCard} disabled={reviveSending}>
+              {reviveSending ? '正在补卡…' : '她断卡了？送张复活卡'}
+            </button>
+            {reviveMsg && <div className="tiny" style={{ marginTop: 6 }}>{reviveMsg}</div>}
           </div>
 
           {/* 名师诊断（基于她愿意记录的数据） */}

@@ -6,6 +6,7 @@ import Chat from './Chat'
 import Plan from './Plan'
 import DailyWord from './DailyWord'
 import TodayWord from './TodayWord'
+import CheerCard from './CheerCard'
 import MoreTools from './MoreTools'
 import Mood from './Mood'
 import MemoryEcho from './MemoryEcho'
@@ -147,6 +148,7 @@ export default function StudentView({ user, nonce, onSignOut }) {
 
       {tab === 'today' && (
         <>
+          <CheerCard nonce={n} />
           <Tasks onChanged={changed} />
           <TodayWord />
           <div className="card" style={{ cursor: 'pointer' }} onClick={() => setTreeOpen(true)}>
