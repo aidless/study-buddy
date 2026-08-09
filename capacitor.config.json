@@ -1,5 +1,13 @@
 {
   "appId": "com.haolo.studybuddy",
   "appName": "考研督学",
-  "webDir": "dist"
+  "webDir": "dist",
+  "plugins": {
+    "CapacitorUpdater": {
+      "autoUpdate": true,
+      "appId": "com.haolo.studybuddy",
+      "apiKey": "CHANGE_ME",
+      "version": "0.1.0"
+    }
+  }
 }
