@@ -11,6 +11,7 @@ import { SEED_QUESTIONS } from '../lib/qbankSeed.js'
 import { ESSAY } from '../lib/qbankEssay.js'
 import { addSelfTest } from '../lib/db'
 import { Fig } from './qbankRichText'
+import { enableNativeLock, disableNativeLock } from '../lib/nativeLock'
 
 // 套卷选择题按题号归科（408 统考固定区间）
 const PAPER_SUBJECT = (no) =>
@@ -105,6 +106,7 @@ export default function PaperMode({ onBack, onLockChange }) {
     setAnswers({}); setEssayMarks({}); setIdx(0); setLeft(EXAM_MIN * 60); setResult(null); setSavedMsg('')
     setMode('exam')
     onLockChange && onLockChange(true)
+    enableNativeLock() // 考试模式：原生屏幕固定（安卓 APK 生效）
     // 考试模式锁 App：全屏沉浸（PWA/浏览器），原生壳走系统钉屏
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen().catch(() => {})
@@ -114,6 +116,7 @@ export default function PaperMode({ onBack, onLockChange }) {
   const finish = (auto) => {
     setMode('result')
     onLockChange && onLockChange(false)
+    disableNativeLock() // 交卷/超时结束考试后解除屏幕固定
     if (document.fullscreenElement && document.exitFullscreen) {
       document.exitFullscreen().catch(() => {})
     }
