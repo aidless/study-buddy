@@ -4,12 +4,14 @@ import UpdateBanner from './components/UpdateBanner'
 import StudentView from './components/StudentView'
 import SupervisorView from './components/SupervisorView'
 import { loadProfile, signOut, subscribe, USE_SUPABASE } from './lib/db'
+import { setupOta } from './lib/ota'
 
 export default function App() {
   const [user, setUser] = useState(undefined)
   const [nonce, setNonce] = useState(0)
 
   useEffect(() => {
+    setupOta()
     loadProfile().then((u) => setUser(u))
   }, [])
 
