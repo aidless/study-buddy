@@ -2,7 +2,7 @@
 // 用法：set SB_SERVICE_ROLE=<service_role> && node scripts/publish-update.mjs [版本号]
 // 缺省版本号在 package.json 基础上 +0.0.1
 import { execSync } from 'node:child_process'
-import { readFileSync, writeFileSync, readdirSync, statSync, createReadStream } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
