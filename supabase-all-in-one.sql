@@ -142,7 +142,7 @@ drop policy if exists "profiles_insert" on public.profiles;
 drop policy if exists "profiles_update" on public.profiles;
 create policy "profiles_select" on public.profiles for select using (id = auth.uid() or couple_id = public.my_couple_id());
 create policy "profiles_insert" on public.profiles for insert with check (id = auth.uid());
-create policy "profiles_update" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid());
+create policy "profiles_update" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid() and couple_id = public.my_couple_id());
 
 -- 任务 / 专注 / 打卡 / 消息：仅同小组成员可见可改
 drop policy if exists "tasks_all" on public.tasks;

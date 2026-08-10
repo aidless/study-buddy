@@ -3,3 +3,11 @@ dist/
 preview-run.log
 preview-run.log.err
 .env
+# 企业级发布：密钥与环境（严禁入库）
+android/keystore/
+android/keystore.properties
+.env.*
+!.env.example
+# 发布产物
+deploy/*.zip
+deploy/*.apk

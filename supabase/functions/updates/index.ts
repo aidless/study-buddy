@@ -10,6 +10,13 @@ const json = (obj, status = 200) => new Response(JSON.stringify(obj), {
   headers: { 'Content-Type': 'application/json', ...corsHeaders }
 })
 
+function hashPercent(seed) {
+  let h = 0
+  const s = String(seed || '')
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0
+  return h % 100
+}
+
 function isNewer(a, b) {
   const pa = String(a || '0').split('.').map((x) => parseInt(x, 10) || 0)
   const pb = String(b || '0').split('.').map((x) => parseInt(x, 10) || 0)
@@ -39,6 +46,11 @@ Deno.serve(async (req) => {
     const latestV = String(latest.version || '')
     if (!latestV || !isNewer(latestV, current)) {
       return json({ kind: 'up_to_date', message: 'no update available', version: current })
+    }
+    // 灰度：rollout 0-100，按 device_id 稳定哈希决定是否下发；100 = 全量
+    const rollout = Math.max(0, Math.min(100, Number(latest.rollout) || 100))
+    if (rollout < 100 && hashPercent(body.device_id + ':' + body.app_id) >= rollout) {
+      return json({ kind: 'up_to_date', message: 'no update available (rollout)', version: current })
     }
     return json({
       version: latestV,

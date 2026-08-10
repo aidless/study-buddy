@@ -16,7 +16,9 @@ const BUCKET = 'updates'
 
 const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf-8'))
 let [maj, min, pat] = (pkg.version || '0.1.0').split('.').map(Number)
-const version = process.argv[2] || `${maj}.${min}.${pat + 1}`
+const version = (process.argv[2] || `${maj}.${min}.${pat + 1}`).replace(/--rollout.*$/, '')
+const rolloutArg = process.argv.find((a) => a.startsWith('--rollout'))
+const rollout = rolloutArg ? Number(rolloutArg.split('=')[1] || 100) : 100
 
 console.log('1/4 构建 dist …')
 execSync('npm run build', { cwd: root, stdio: 'inherit' })
@@ -45,7 +47,7 @@ await api('PUT', `${URL}/storage/v1/bucket/${BUCKET}`, JSON.stringify({ public: 
 // 上传 zip
 await api('POST', `${URL}/storage/v1/object/${BUCKET}/${zipName}`, readFileSync(zipPath), { 'Content-Type': 'application/zip', 'x-upsert': 'true' })
 // 上传 latest.json
-const manifest = { version, url: zipUrl, checksum, note: '', publishedAt: new Date().toISOString() }
+const manifest = { version, url: zipUrl, checksum, note: '', rollout, publishedAt: new Date().toISOString() }
 await api('POST', `${URL}/storage/v1/object/${BUCKET}/latest.json`, JSON.stringify(manifest, null, 2), { 'Content-Type': 'application/json', 'x-upsert': 'true' })
 
 console.log('4/4 发布完成: v' + version + ' → ' + zipUrl)
