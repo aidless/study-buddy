@@ -26,8 +26,9 @@ execSync('npm run build', { cwd: root, stdio: 'inherit' })
 console.log('2/4 打包 dist → study-buddy-' + version + '.zip')
 const dist = path.join(root, 'dist')
 const zipPath = path.join(root, 'deploy', `study-buddy-${version}.zip`)
-execSync(`python ${JSON.stringify(path.join(root, 'scripts', 'make_zip.py'))} ${JSON.stringify(dist)} ${JSON.stringify(zipPath)}`, { stdio: 'inherit' })
-execSync(`python ${JSON.stringify(path.join(root, 'scripts', 'check_zip.py'))} ${JSON.stringify(zipPath)}`, { stdio: 'inherit' })
+const py = os.platform() === 'win32' ? 'python' : 'python3'
+execSync(`${py} ${JSON.stringify(path.join(root, 'scripts', 'make_zip.py'))} ${JSON.stringify(dist)} ${JSON.stringify(zipPath)}`, { stdio: 'inherit' })
+execSync(`${py} ${JSON.stringify(path.join(root, 'scripts', 'check_zip.py'))} ${JSON.stringify(zipPath)}`, { stdio: 'inherit' })
 const checksum = createHash('sha256').update(readFileSync(zipPath)).digest('hex')
 const zipName = `study-buddy-${version}.zip`
 const zipUrl = `${URL}/storage/v1/object/public/${BUCKET}/${zipName}`
