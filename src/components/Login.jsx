@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { register, signIn, USE_SUPABASE, hasLocalData, migrateLocalToCloud, LS } from '../lib/db'
+import { register, signIn, USE_SUPABASE, hasLocalData, migrateLocalToCloud, LS, sendPhoneCode, signInWithPhone } from '../lib/db'
 import Icon from './Icon'
 
 async function maybeMigrate(user) {
@@ -23,6 +23,10 @@ async function maybeMigrate(user) {
 
 export default function Login({ onAuth }) {
   const [tab, setTab] = useState(USE_SUPABASE ? 'login' : 'register')
+  const [authWay, setAuthWay] = useState('email') // email | phone
+  const [phone, setPhone] = useState('')
+  const [phoneCode, setPhoneCode] = useState('')
+  const [codeSent, setCodeSent] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
@@ -36,7 +40,10 @@ export default function Login({ onAuth }) {
     setBusy(true)
     try {
       let user
-      if (tab === 'register') {
+      if (authWay === 'phone') {
+        if (!codeSent) throw new Error('请先获取验证码')
+        user = await signInWithPhone(phone, phoneCode, { name: name || (role === 'student' ? '学员' : '督学'), role, coupleCode: code })
+      } else if (tab === 'register') {
         user = await register({ email, password, name: name || (role === 'student' ? '学员' : '督学'), role, coupleCode: code })
       } else {
         user = await signIn({ email, password })
@@ -66,9 +73,38 @@ export default function Login({ onAuth }) {
       )}
 
       {USE_SUPABASE && (
-        <div className="seg" style={{ marginBottom: 14 }}>
-          <button className={tab === 'login' ? 'on' : ''} onClick={() => setTab('login')}>登录</button>
-          <button className={tab === 'register' ? 'on' : ''} onClick={() => setTab('register')}>注册</button>
+        <>
+          <div className="seg" style={{ marginBottom: 8 }}>
+            <button className={tab === 'login' ? 'on' : ''} onClick={() => setTab('login')}>登录</button>
+            <button className={tab === 'register' ? 'on' : ''} onClick={() => setTab('register')}>注册</button>
+          </div>
+          <div className="seg" style={{ marginBottom: 14 }}>
+            <button className={authWay === 'email' ? 'on' : ''} onClick={() => setAuthWay('email')}>邮箱</button>
+            <button className={authWay === 'phone' ? 'on' : ''} onClick={() => setAuthWay('phone')}>手机号</button>
+          </div>
+        </>
+      )}
+
+      {USE_SUPABASE && authWay === 'phone' && (
+        <div className="field">
+          <label>手机号</label>
+          <div className="row" style={{ gap: 8 }}>
+            <input className="input" type="tel" placeholder="+86 13800000000" value={phone} onChange={(e) => setPhone(e.target.value)} style={{ flex: 1 }} />
+            <button className="btn ghost" style={{ flexShrink: 0 }} disabled={busy || codeSent} onClick={async () => {
+              setErr('')
+              if (!phone || phone.length < 7) { setErr('请输入正确的手机号（含国家码，如 +8613800000000）'); return }
+              setBusy(true)
+              try { await sendPhoneCode(phone); setCodeSent(true); setErr('验证码已发送，请查收') }
+              catch (e) { setErr(e.message || '发送失败') }
+              finally { setBusy(false) }
+            }}>{codeSent ? '已发送' : '获取验证码'}</button>
+          </div>
+          {codeSent && (
+            <input className="input" type="text" inputMode="numeric" placeholder="输入 6 位验证码" value={phoneCode} onChange={(e) => setPhoneCode(e.target.value)} style={{ marginTop: 8 }} />
+          )}
+          {tab === 'register' && (
+            <div className="tiny" style={{ marginTop: 6, opacity: 0.7 }}>手机号注册会自动建档；督学仍需填写下方邀请码</div>
+          )}
         </div>
       )}
 

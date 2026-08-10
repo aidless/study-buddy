@@ -1,6 +1,6 @@
 // db.js —— 统一数据层：认证 / 任务 / 专注 / 打卡 / 备考 / 聊天 / 错题 / 迁移（双模式：本地 + Supabase）
 import { supabase, USE_SUPABASE, LS, uid, genCode, todayStr, daysUntil, fmtDur, dayOf } from './_util.js'
-import { register, signIn, signOut, loadProfile, getPartner } from './auth.js'
+import { register, signIn, signOut, loadProfile, getPartner, sendPhoneCode, signInWithPhone } from './auth.js'
 import { setCountdown, getCountdown, listGoals, addGoal, toggleGoal, removeGoal,
          addSelfTest, listSelfTests, removeSelfTest, getPlan, getPlanChecks, setPlanCheck, getPlanAnchor,
          selfTestSummary } from './plan.js'
@@ -19,7 +19,7 @@ import { collectWrongToBook } from './quizWrong.js'
 
 export {
   supabase, USE_SUPABASE, LS, uid, genCode, todayStr, daysUntil, fmtDur, dayOf,
-  register, signIn, signOut, loadProfile, getPartner,
+  register, signIn, signOut, loadProfile, getPartner, sendPhoneCode, signInWithPhone,
   setCountdown, getCountdown, listGoals, addGoal, toggleGoal, removeGoal,
   addSelfTest, listSelfTests, removeSelfTest, getPlan, getPlanChecks, setPlanCheck, getPlanAnchor, selfTestSummary,
   getDegreeType, setDegreeType, getExamType, setExamType, getTargetScore, setTargetScore,

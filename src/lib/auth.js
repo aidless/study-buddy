@@ -58,6 +58,38 @@ export async function signIn({ email, password }) {
   return u
 }
 
+export async function sendPhoneCode(phone) {
+  if (!USE_SUPABASE) throw new Error('手机号登录仅云端模式可用')
+  const { error } = await supabase.auth.signInWithOtp({ phone })
+  if (error) throw new Error(error.message)
+}
+
+// 手机号验证码登录/注册：验证成功后补齐 profiles/couples（新用户）
+export async function signInWithPhone(phone, token, { name, role, coupleCode } = {}) {
+  if (!USE_SUPABASE) throw new Error('手机号登录仅云端模式可用')
+  profileCache = null; profileCacheAt = 0
+  const { data, error } = await supabase.auth.verifyOtp({ phone, token, type: 'sms' })
+  if (error) throw new Error(error.message)
+  const userId = data.user?.id
+  if (!userId) throw new Error('验证失败，请重试')
+  const { data: existing } = await supabase.from('profiles').select('id, couple_id').eq('id', userId).maybeSingle()
+  if (existing) return await loadProfile()
+  let coupleId, code
+  if (role === 'student') {
+    coupleId = uid()
+    code = genCode()
+    await supabase.from('couples').insert({ id: coupleId, code })
+    await supabase.from('profiles').insert({ id: userId, name: name || '学员', role, couple_id: coupleId, couple_code: code })
+  } else {
+    const { data: c, error: ce } = await supabase.rpc('lookup_couple_by_code', { p_code: (coupleCode || '').toUpperCase() })
+    if (ce || !c || c.length === 0) throw new Error('邀请码无效，请向学员索取')
+    coupleId = c[0].id
+    code = c[0].code
+    await supabase.from('profiles').insert({ id: userId, name: name || '督学', role, couple_id: coupleId, couple_code: code })
+  }
+  return await loadProfile()
+}
+
 export async function signOut() {
   profileCache = null; profileCacheAt = 0
   try {
