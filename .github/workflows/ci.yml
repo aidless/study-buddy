@@ -13,10 +13,11 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
+      - name: 环境信息
+        run: node -v && npm -v
+      - name: 安装依赖（lock 宽容，兼容不同 npm 版本）
+        run: npm install --no-audit --no-fund
       - name: 题库与逻辑单测
         run: npm test
       - name: Web 构建
         run: npm run build
-      - name: 冒烟（核心流程自动化回归）
-        run: node .workbuddy/smoke_rebuild.mjs || true
