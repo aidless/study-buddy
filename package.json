@@ -1,7 +1,7 @@
 {
   "name": "study-buddy",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,6 +16,7 @@
   "dependencies": {
     "@capacitor/android": "^6.2.1",
     "@capacitor/core": "^6.2.1",
+    "@capacitor/push-notifications": "^6.0.5",
     "@capgo/capacitor-updater": "^6.50.2",
     "@mediapipe/tasks-vision": "^1.0.1",
     "@sentry/capacitor": "^4.2.0",

@@ -5,6 +5,7 @@ import StudentView from './components/StudentView'
 import SupervisorView from './components/SupervisorView'
 import { loadProfile, signOut, subscribe, USE_SUPABASE } from './lib/db'
 import { setupOta } from './lib/ota'
+import { setupPush } from './lib/push'
 
 export default function App() {
   const [user, setUser] = useState(undefined)
@@ -12,6 +13,7 @@ export default function App() {
 
   useEffect(() => {
     setupOta()
+    setupPush()
     loadProfile().then((u) => setUser(u))
   }, [])
 
