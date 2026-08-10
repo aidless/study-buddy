@@ -18,7 +18,14 @@ jobs:
           java-version: 17
       - name: Android SDK
         uses: android-actions/setup-android@v3
-      - run: npm ci
+      - name: Gradle 缓存
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*') }}
+      - run: npm install --no-audit --no-fund
 
       - name: 写入发布密钥（CI Secrets）
         env:
@@ -39,7 +46,7 @@ jobs:
         run: |
           npm run build
           npx cap sync android
-          cd android && ./gradlew assembleRelease --console=plain
+          cd android && chmod +x gradlew && ./gradlew assembleRelease --console=plain
 
       - name: 上传 APK 产物
         uses: actions/upload-artifact@v4
