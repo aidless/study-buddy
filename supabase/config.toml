@@ -414,4 +414,4 @@ enabled = true
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
 
 [functions.ai-tutor]
-verify_jwt = false
+verify_jwt = true

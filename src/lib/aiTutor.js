@@ -27,9 +27,16 @@ export async function askAiTutor({ mode = 'ask', question }) {
   } catch {}
   const context = buildContext({ summary, wrongStats: summary ? wrongBookStats(recentTests) : [], wrongItems, countdownDays, examLabel, recentTests })
 
+  const headers = { 'Content-Type': 'application/json' }
+  // 云端模式携带 anon key 鉴权（Edge Function verify_jwt，防外部滥用）
+  const anon = (import.meta.env && import.meta.env.VITE_SUPABASE_ANON_KEY) || ''
+  if (anon) {
+    headers['apikey'] = anon
+    headers['Authorization'] = 'Bearer ' + anon
+  }
   const res = await fetch(tutorUrl(), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ mode, question, context })
   })
   if (!res.ok) throw new Error('AI 服务暂不可用（' + res.status + '）')
