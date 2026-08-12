@@ -1,0 +1,17 @@
+<view class="login">
+  <view class="brand">
+    <view class="mark">督学</view>
+    <view class="lead">考研长线陪伴 · 双向督学</view>
+  </view>
+  <view class="card">
+    <view class="h2">开始使用</view>
+    <view class="chips" style="margin-bottom:14px;">
+      <view class="chip {{role === 'student' ? 'on' : ''}}" data-role="student" bindtap="setRole">学员（她）</view>
+      <view class="chip {{role === 'supervisor' ? 'on' : ''}}" data-role="supervisor" bindtap="setRole">督学（你）</view>
+    </view>
+    <input class="input" placeholder="起个名字" value="{{name}}" bindinput="onName" />
+    <view class="err">{{err}}</view>
+    <button class="btn" bindtap="enter">进入</button>
+    <view class="tiny" style="margin-top:12px;text-align:center;">当前为本地体验模式，数据仅存本机。云同步接入见 cloudfunctions/proxy 说明。</view>
+  </view>
+</view>

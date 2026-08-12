@@ -1,0 +1,9 @@
+.qhead { font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
+.stem { font-size: 15px; line-height: 1.7; margin-bottom: 14px; }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt { border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; font-size: 14px; line-height: 1.5; }
+.opt.on { border-color: var(--primary); background: var(--primary-soft); }
+.opt-l { font-weight: 700; margin-right: 6px; }
+.ok { color: var(--primary); }
+.bad { color: var(--tomato); }
+.review { border-top: 1px solid var(--line); padding-top: 10px; }
