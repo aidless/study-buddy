@@ -1,0 +1,45 @@
+<view class="card">
+  <view class="chips">
+    <view wx:for="{{subjects}}" wx:key="key" class="chip {{subject === item.key ? 'on' : ''}}" data-key="{{item.key}}" bindtap="pickSubject">{{item.label}}</view>
+  </view>
+  <view class="err" wx:if="{{err}}">{{err}}</view>
+
+  <block wx:if="{{stage === 'setup'}}">
+    <view class="h2" style="margin-top:14px;">抽几道</view>
+    <view class="chips">
+      <view class="chip {{count === 5 ? 'on' : ''}}" data-n="5" bindtap="pickCount">5 道</view>
+      <view class="chip {{count === 10 ? 'on' : ''}}" data-n="10" bindtap="pickCount">10 道</view>
+      <view class="chip {{count === 20 ? 'on' : ''}}" data-n="20" bindtap="pickCount">20 道</view>
+    </view>
+    <view class="tiny" style="margin-top:10px;">从 {{subject}} 真题/模拟题随机抽题，做完自动判分并给出解析。</view>
+    <button class="btn" style="margin-top:16px;" bindtap="start">开始随机考试</button>
+  </block>
+
+  <block wx:elif="{{stage === 'quiz'}}">
+    <view class="qhead">第 {{idx + 1}}/{{qs.length}} 题 · 已答 {{answered}}/{{qs.length}}</view>
+    <view class="stem">{{qs[idx].stem}}</view>
+    <view class="tiny" wx:if="{{qs[idx].opts[0].t.indexOf('（图') === 0}}" style="margin:8px 0;color:var(--amber);">（本题为图题，图片请在 App 端查看，先按文字选项作答）</view>
+    <view class="opts">
+      <view wx:for="{{qs[idx].opts}}" wx:key="v" class="opt {{answers[qs[idx].id] === item.v ? 'on' : ''}}" data-v="{{item.v}}" bindtap="pick">
+        <text class="opt-l">{{item.v}}.</text> {{item.t}}
+      </view>
+    </view>
+    <view class="row" style="margin-top:16px;">
+      <button class="btn ghost" style="flex:1;" bindtap="next" disabled="{{idx === qs.length - 1}}">下一题</button>
+      <button class="btn" style="flex:1;" bindtap="submit">交卷</button>
+    </view>
+  </block>
+
+  <block wx:elif="{{stage === 'result'}}">
+    <view class="h2">考试结果</view>
+    <view style="font-size:34px;font-weight:800;color:var(--primary);">{{result.correct}}/{{result.total}}</view>
+    <view class="tiny">正确率 {{result.pct}}% · 已记入自测</view>
+    <view wx:for="{{result.rows}}" wx:key="index" class="review" style="margin-top:14px;">
+      <view class="tiny">{{item.q.no || (index + 1)}}. {{item.q.subject || subject}} {{item.q.year || ''}}</view>
+      <view class="tiny" style="font-size:13px;">{{item.q.stem}}</view>
+      <view class="tiny {{item.correct ? 'ok' : 'bad'}}">{{item.correct ? '✓ 答对' : '✗ 你选 ' + (item.user || '未作答') + '，正确 ' + item.q.answer}}</view>
+      <view class="tiny" wx:if="{{item.q.analysis}}">解析：{{item.q.analysis}}</view>
+    </view>
+    <button class="btn ghost" style="margin-top:18px;" bindtap="again">再来一套</button>
+  </block>
+</view>

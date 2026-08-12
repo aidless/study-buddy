@@ -1,0 +1,28 @@
+{
+  "pages": [
+    "pages/today/today",
+    "pages/exam/exam",
+    "pages/me/me",
+    "pages/login/login"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#2f9e6e",
+    "navigationBarTitleText": "考研督学",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#9aa5a0",
+    "selectedColor": "#2f9e6e",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/today/today", "text": "今日" },
+      { "pagePath": "pages/exam/exam", "text": "自测" },
+      { "pagePath": "pages/me/me", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

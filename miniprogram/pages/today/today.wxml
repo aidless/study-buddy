@@ -1,0 +1,31 @@
+<view wx:if="{{user}}">
+  <view class="card" style="display:flex;justify-content:space-between;align-items:center;">
+    <view>
+      <view class="h2" style="margin-bottom:2px;">{{user.name}}，今天也加油</view>
+      <view class="tiny">{{date}} · 距离考研初试还有 {{cd}} 天</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="h2">今日打卡</view>
+    <view class="row">
+      <button class="btn {{checked ? 'ghost' : ''}}" style="flex:1;" bindtap="doCheck">{{checked ? '已打卡 ✓' : '打卡'}}</button>
+      <view class="tiny">连续 {{stats.streak}} 天</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="h2">今日一句话</view>
+    <textarea class="input" style="height:70px;" maxlength="60" placeholder="写一句今天的心情" value="{{word}}" bindinput="onWord" />
+    <button class="btn ghost" style="margin-top:10px;" bindtap="saveWord">{{wordSaved ? '已写好啦 ✓' : '写下来'}}</button>
+  </view>
+
+  <view class="card">
+    <view class="h2">学习进度</view>
+    <view class="row" style="justify-content:space-between;">
+      <view><view style="font-size:22px;font-weight:800;">{{stats.streak}}</view><view class="tiny">连续天数</view></view>
+      <view><view style="font-size:22px;font-weight:800;">{{stats.selftests}}</view><view class="tiny">自测次数</view></view>
+      <view><view style="font-size:22px;font-weight:800;">{{stats.acc === null ? '—' : stats.acc + '%'}}</view><view class="tiny">正确率</view></view>
+    </view>
+  </view>
+</view>

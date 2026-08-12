@@ -1,0 +1,25 @@
+<view wx:if="{{user}}">
+  <view class="card">
+    <view class="h2">{{user.name}}</view>
+    <view class="tiny">{{user.role === 'supervisor' ? '督学' : '学员'}} · 本地体验模式</view>
+    <view class="row" style="justify-content:space-between;margin-top:14px;">
+      <view><view style="font-size:22px;font-weight:800;">{{stats.streak}}</view><view class="tiny">连续天数</view></view>
+      <view><view style="font-size:22px;font-weight:800;">{{stats.selftests}}</view><view class="tiny">自测次数</view></view>
+      <view><view style="font-size:22px;font-weight:800;">{{stats.acc === null ? '—' : stats.acc + '%'}}</view><view class="tiny">正确率</view></view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="h2">最近自测</view>
+    <view wx:if="{{tests.length === 0}}" class="tiny">还没有自测记录，去「自测」页做一套吧</view>
+    <view wx:for="{{tests}}" wx:key="id" style="padding:8px 0;border-bottom:1px solid var(--line);">
+      <view class="tiny" style="font-size:13px;">{{item.subject}} · {{item.name}}</view>
+      <view class="tiny">{{item.correct}}/{{item.total}} 题 · {{item.at.slice(0,10)}}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <button class="btn ghost" style="margin-bottom:10px;" bindtap="clearData">清除本地数据</button>
+    <button class="btn ghost" bindtap="logout">退出登录</button>
+  </view>
+</view>
