@@ -18,3 +18,7 @@ supabase/.temp/
 recovery/
 *.log
 .recover.patch
+# Runtime logs (stdout/stderr) — evidence archives live under evidence/
+*.err
+*.out
+*.logfile
