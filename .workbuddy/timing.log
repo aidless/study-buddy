@@ -1,9 +1,0 @@
-start
-t+1s: textareas=[] today=false word=false
-
-t+2s: textareas=[] today=false word=false
-
-t+3s: textareas=[] today=false word=false
-
-t+4s: textareas=["写一句今天的心情或想对他"] today=true word=true
-

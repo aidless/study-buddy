@@ -7,9 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host",
-    "test": "vitest run && node .workbuddy/verify_qbank.mjs",
-    "verify:bank": "node .workbuddy/verify_qbank.mjs",
-    "verify:enrich": "node .workbuddy/qbank_verify_enrich.mjs",
+    "test": "vitest run && node scripts/verify_qbank.mjs",
+    "verify:bank": "node scripts/verify_qbank.mjs",
     "test:unit": "vitest run",
     "test:migrate": "node test/migrateLocalToCloud.test.mjs"
   },

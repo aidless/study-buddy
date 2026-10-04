@@ -1,8 +1,0 @@
-INFO         | Android emulator version 37.1.11.0 (build_id 15917651) (CL:N/A)
-INFO         | Graphics backend: gfxstream
-INFO         | Found AVD name 'haolo_test'
-WARNING      | Failed to process .ini file F:\test\2026-07-31-21-50-31\emu-avd\haolo_test.avd\config.ini for reading.
-WARNING      | Failed to process .ini file F:\test\2026-07-31-21-50-31\emu-avd\haolo_test.avd\config.ini for reading.
-INFO         | Found AVD target architecture: arm
-INFO         | argv[0]: 'F:\Android\emulator\emulator.exe'; program directory: 'F:\Android\emulator'
-FATAL        | CPU Architecture 'arm' is not supported by the QEMU2 emulator, (the classic engine is deprecated!)
