@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@capacitor/android": "^6.2.1",
-    "@capacitor/core": "^6.2.1",
+    "@capacitor/core": "^8.5.2",
     "@capacitor/push-notifications": "^6.0.5",
     "@capgo/capacitor-updater": "^6.50.2",
     "@mediapipe/tasks-vision": "^1.0.1",
