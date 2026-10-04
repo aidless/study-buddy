@@ -31,7 +31,7 @@
     "libsodium-wrappers": "^0.8.4",
     "puppeteer-core": "^25.5.0",
     "undici": "^8.10.0",
-    "vite": "^5.4.8",
+    "vite": "^8.3.2",
     "vitest": "^4.1.10"
   }
 }
