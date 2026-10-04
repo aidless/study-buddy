@@ -1,4 +1,6 @@
 # 鐫ｅ 路 鑰冪爺闄即锛圥WA锛?
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  [![CI](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)
 缁欏コ鏈嬪弸鐢ㄧ殑鑰冪爺闀跨嚎闄即 + 鍙屽悜鐫ｅ灏忓伐鍏枫€傛墜鏈烘祻瑙堝櫒鎵撳紑銆佸姞鍒颁富灞忥紝浣撻獙绛夊悓 App锛屾棤闇€涓婃灦搴旂敤鍟嗗簵銆?
 ## 璁捐鍝插
 
