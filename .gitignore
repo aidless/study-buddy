@@ -11,3 +11,10 @@ android/keystore.properties
 # 发布产物
 deploy/*.zip
 deploy/*.apk
+
+# working residue
+supabase/.temp/
+.workbuddy/
+recovery/
+*.log
+.recover.patch
