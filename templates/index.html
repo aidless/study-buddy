@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>study-buddy · 今日学习计划</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #0f1117; color: #e4e6ef; min-height: 100vh; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 28px 16px 48px; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .sub { color: #888; font-size: 13px; margin-bottom: 20px; }
+  .card { background: #1a1d27; border: 1px solid #2d3140; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+  label { display: block; font-size: 13px; color: #aaa; margin-bottom: 6px; }
+  input[type=text], input[type=number], textarea { width: 100%; background: #14161f; border: 1px solid #2d3140; color: #e4e6ef; border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+  textarea { min-height: 90px; resize: vertical; }
+  input[type=number] { width: 90px; }
+  button { background: #4a6cf7; color: #fff; border: 0; border-radius: 8px; padding: 10px 18px; font-size: 14px; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: wait; }
+  button.ghost { background: #232734; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .task { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #262a37; }
+  .task:last-child { border-bottom: 0; }
+  .task input[type=checkbox] { margin-top: 3px; width: 18px; height: 18px; accent-color: #4ade80; }
+  .task .t { flex: 1; font-size: 14px; line-height: 1.5; }
+  .task.done .t { color: #6b7280; text-decoration: line-through; }
+  .task .m { color: #888; font-size: 12px; white-space: nowrap; }
+  .rate { font-size: 30px; font-weight: 700; }
+  .rate small { font-size: 13px; color: #888; font-weight: 400; }
+  .delta-pos { color: #4ade80; } .delta-neg { color: #f87171; }
+  .msg { color: #f87171; font-size: 13px; margin-top: 8px; min-height: 18px; }
+  .foot { color: #666; font-size: 11.5px; line-height: 1.7; margin-top: 24px; }
+  a { color: #4a6cf7; text-decoration: none; }
+  #reflectBox textarea { margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>study-buddy</h1>
+  <div class="sub">把「今天要学的东西」变成能打勾的清单 · <a href="/buddy/stats/" id="statsLink">我的统计</a></div>
+
+  <div class="card" id="userCard">
+    <label>你的昵称（试运行版：昵称即身份）</label>
+    <div class="row">
+      <input type="text" id="user" placeholder="比如：小明" maxlength="30">
+      <button id="loadBtn" class="ghost">进入</button>
+    </div>
+    <div class="msg" id="userMsg"></div>
+  </div>
+
+  <div id="main" style="display:none;">
+    <div class="card" id="planCard">
+      <label>贴上你今天要完成的学习任务（尽量具体）</label>
+      <textarea id="planText" placeholder="例：看完 Kaggle 把 baseline 跑通，还要复习统计第三章的假设检验"></textarea>
+      <div id="baselineRow" style="display:none; margin-top:10px;">
+        <label>老实说：过去一周，你定的学习任务大概完成了多少？（%：<span id="baselineWhy">用于对比使用后的变化，只有你自己看得到趋势页</span>）</label>
+        <input type="number" id="baseline" min="0" max="100" placeholder="0-100">
+      </div>
+      <div class="row" style="margin-top:10px;">
+        <button id="planBtn">帮我拆成清单</button>
+        <span id="planState" style="color:#888; font-size:13px;"></span>
+      </div>
+      <div class="msg" id="planMsg"></div>
+    </div>
+
+    <div class="card" id="listCard" style="display:none;">
+      <div class="row" style="justify-content:space-between; margin-bottom:6px;">
+        <div class="rate"><span id="rateNum">0%</span> <small id="rateDetail"></small></div>
+        <div style="color:#888; font-size:12px;" id="streakLine"></div>
+      </div>
+      <div id="taskList"></div>
+    </div>
+
+    <div class="card" id="reflectCard" style="display:none;">
+      <label id="reflectQ">今日复盘</label>
+      <div class="row" style="margin-top:0;">
+        <button id="qBtn" class="ghost">给我一个复盘问题</button>
+      </div>
+      <textarea id="reflectA" placeholder="写下你的回答（会保存，仅自己可见）" style="display:none;"></textarea>
+      <div class="row" style="margin-top:8px;">
+        <button id="reflectBtn" style="display:none;">保存复盘</button>
+      </div>
+      <div class="msg" id="reflectMsg"></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    试运行 v1 · 计划由 AI 拆解、完成由你自己打勾。<br>
+    诚实边界：基线是自报数字（有回忆偏差），完成率是勾选实测（有自评宽松偏差）；单人样本不构成因果结论。<br>
+    <a href="/llmlab/">llm-lab</a> · 同一服务器上的评测框架公开 demo
+  </div>
+</div>
+
+<script>
+let nick = localStorage.getItem('buddy_nick') || '';
+const $ = id => document.getElementById(id);
+if (nick) { $('user').value = nick; }
+
+function err(id, m) { $(id).textContent = m || ''; }
+
+$('loadBtn').onclick = () => {
+  nick = $('user').value.trim();
+  if (!nick) { err('userMsg', '先填个昵称'); return; }
+  err('userMsg', '');
+  localStorage.setItem('buddy_nick', nick);
+  enter();
+};
+
+async function enter() {
+  $('main').style.display = 'block';
+  $('userCard').style.display = 'none';
+  $('statsLink').href = '/buddy/stats/?user=' + encodeURIComponent(nick);
+  const d = await (await fetch('/buddy/api/day?user=' + encodeURIComponent(nick))).json();
+  $('statsLink').dataset.hasData = d.planned > 0 ? '1' : '';
+  if (d.is_new_user) $('baselineRow').style.display = 'block';
+  if (d.planned > 0) { render(d); }
+  else { $('planState').textContent = '还没有今天的计划'; }
+}
+
+function render(d) {
+  $('listCard').style.display = 'block';
+  $('planText').value = d.raw_text || '';
+  $('baselineRow').style.display = d.is_new_user ? 'block' : 'none';
+  const pct = d.rate === null ? '—' : Math.round(d.rate * 100) + '%';
+  $('rateNum').textContent = pct;
+  $('rateDetail').textContent = d.done + ' / ' + d.planned + ' 项完成';
+  $('streakLine').textContent = '';
+  $('taskList').innerHTML = '';
+  d.subtasks.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'task' + (s.done ? ' done' : '');
+    div.innerHTML = '<input type="checkbox"' + (s.done ? ' checked' : '') + '>' +
+      '<div class="t"></div><div class="m">' + s.minutes + ' 分钟</div>';
+    div.querySelector('.t').textContent = s.text;
+    div.querySelector('input').onchange = async () => {
+      const r = await fetch('/buddy/api/toggle', { method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({user: nick, idx: i}) });
+      if (r.ok) { render(await r.json()); } else { err('planMsg', '保存失败，重试一次'); }
+    };
+    $('taskList').appendChild(div);
+  });
+  $('reflectCard').style.display = 'block';
+  if (d.reflection) {
+    $('reflectQ').textContent = d.reflection.question;
+    $('reflectA').style.display = 'block';
+    $('reflectA').value = d.reflection.answer || '';
+    $('reflectBtn').style.display = 'block';
+    $('qBtn').style.display = 'none';
+  }
+}
+
+$('planBtn').onclick = async () => {
+  const text = $('planText').value.trim();
+  if (text.length < 4) { err('planMsg', '任务写具体一点'); return; }
+  $('planBtn').disabled = true; err('planMsg', '');
+  const body = {user: nick, text};
+  if ($('baselineRow').style.display !== 'none' && $('baseline').value !== '') {
+    body.baseline_pct = parseFloat($('baseline').value);
+  }
+  const r = await fetch('/buddy/api/plan', { method: 'POST',
+    headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
+  $('planBtn').disabled = false;
+  if (r.ok) { render(await r.json()); $('planState').textContent = ''; }
+  else { err('planMsg', '拆解失败（' + r.status + '），稍后重试'); }
+};
+
+$('qBtn').onclick = async () => {
+  $('qBtn').disabled = true;
+  const r = await fetch('/buddy/api/reflection-question?user=' + encodeURIComponent(nick));
+  $('qBtn').disabled = false;
+  if (r.ok) {
+    const j = await r.json();
+    $('reflectQ').textContent = j.question;
+    $('reflectA').style.display = 'block';
+    $('reflectBtn').style.display = 'block';
+  } else { err('reflectMsg', '生成失败，稍后再试'); }
+};
+
+$('reflectBtn').onclick = async () => {
+  const a = $('reflectA').value.trim();
+  if (!a) { err('reflectMsg', '写点什么再保存'); return; }
+  const r = await fetch('/buddy/api/reflection', { method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({user: nick, answer: a}) });
+  err('reflectMsg', r.ok ? '已保存 ✓' : '保存失败');
+};
+</script>
+</body>
+</html>
