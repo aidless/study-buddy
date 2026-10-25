@@ -2,7 +2,7 @@
 """生成英语一作文模拟题（小作文 8 + 大作文 8，带参考范文与评分要点）"""
 import io, os, json
 
-OUT = r'F:\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
+OUT = os.environ.get("STUDY_BUDDY_OUT", "outputs/src/lib")  # 原写作者桌面工作区；现默认仓库内 outputs/，可用环境变量覆盖
 
 # 小作文：书信/通知类
 small = [

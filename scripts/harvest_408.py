@@ -2,8 +2,8 @@
 """harvest_408.py v2 —— 顺序扫描 h4(科目) + h5(题号)，解析选择题"""
 import urllib.request, re, io, json, os, time, collections
 
-OUT = r'C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
-CACHE = r'C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\app\outputs\recovery\pages'
+OUT = os.environ.get("STUDY_BUDDY_OUT", "outputs/src/lib")  # 原写作者桌面工作区；现默认仓库内 outputs/
+CACHE = os.environ.get("HARVEST_408_CACHE", "outputs/cache/pages")
 os.makedirs(CACHE, exist_ok=True)
 SUBJ_MAP = {'数据结构': '数据结构', '组成原理': '计算机组成', '操作系统': '操作系统', '计算机网络': '计算机网络'}
 SUBJ_KEYS = {'数据结构': 'ds', '计算机组成': 'co', '操作系统': 'os', '计算机网络': 'net'}

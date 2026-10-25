@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import io
-p = r'F:\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\docs\部署指南.md'
+import io, os
+p = os.environ.get("GUIDE_PATH", "docs/部署指南.md")  # 原为作者桌面工作区路径
 s = io.open(p, encoding='utf-8').read()
 s = s.replace('- [ ] 静态站托管（见下）', '- [x] 静态站托管：https://study-buddy.surge.sh （Surge）')
 old = '## 方案 B（推荐现在用）：Vercel / Netlify（静态站；AI 名师函数已上线，无需再部署）'

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """生成 40 道政治模拟练习题，追加到 qbankPolitics.js（补到 100）"""
 import io, os, json
-OUT = r'F:\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
+OUT = os.environ.get("STUDY_BUDDY_OUT", "outputs/src/lib")  # 原写作者桌面工作区；现默认仓库内 outputs/，可用环境变量覆盖
 
 def q(qid, topic, stem, opts, ans, ana):
     return {'id': qid, 'year': 2026, 'subject': '政治', 'type': 'choice', 'no': 0, 'stem': stem,
