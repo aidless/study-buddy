@@ -1,12 +1,12 @@
 // Service Worker —— 离线缓存 + 提醒脚手架（2026-08-08 优化版）
-const VERSION = 'study-buddy-v2'
+const VERSION = 'study-buddy-v3'
 const ASSET_CACHE = VERSION + '-assets'
 const SHELL_CACHE = VERSION + '-shell'
 
 self.addEventListener('message', (e) => { if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting() })
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(SHELL_CACHE).then((c) => c.addAll(['/', '/index.html', '/manifest.webmanifest'])).then(() => self.skipWaiting())
+    caches.open(SHELL_CACHE).then((c) => c.addAll(['./', './index.html', './manifest.webmanifest'])).then(() => self.skipWaiting())
   )
 })
 self.addEventListener('activate', (e) => {
@@ -35,7 +35,7 @@ self.addEventListener('fetch', (e) => {
       const clone = res.clone()
       caches.open(SHELL_CACHE).then((c) => c.put(req, clone)).catch(() => {})
       return res
-    }).catch(() => caches.match(req).then((hit) => hit || caches.match('/index.html')))
+    }).catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html')))
   )
 })
 // 提醒（脚手架）：真正 Web Push 需推送服务器；先支持本地通知触发
@@ -43,7 +43,7 @@ self.addEventListener('notificationclick', (e) => {
   e.notification.close()
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
     if (list.length) return list[0].focus()
-    return self.clients.openWindow('/')
+    return self.clients.openWindow('./')
   }))
 })
 self.addEventListener('push', (e) => {

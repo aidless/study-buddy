@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  [![CI](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)
 给好朋友用的考研长线陪伴 + 双向督学小工具。手机浏览器打开、加到主屏，体验等同 App，无需上架应用商店。
 
-**着陆页：** [`landing/`](landing/) · **免注册演示：** 在应用地址后加 `?demo=1`（也兼容 `?guest=student`；自动灌入示例任务、专注与打卡）
+**在线体验：** https://aidless.github.io/study-buddy/?demo=1 · **着陆页：** https://aidless.github.io/study-buddy/landing/ · **免注册演示：** 在应用地址后加 `?demo=1`（也兼容 `?guest=student`；自动灌入示例任务、专注与打卡）
 
 ## 设计哲学
 
@@ -62,7 +62,7 @@ npm install
 npm run build      # 产出 dist/
 npm run preview    # 本地预览
 ```
-把 `dist/` 部署到任意静态托管（CloudStudio / Vercel / Netlify / GitHub Pages）即可。
+把 `dist/` 部署到任意静态托管即可。仓库已配置 GitHub Pages：`.github/workflows/pages.yml` 在 `master` 推送时构建 `npm run build:site` 并发布到 https://aidless.github.io/study-buddy/ ；也可用 Vercel / Cloudflare Pages，步骤见 [`docs/deploy-static.md`](docs/deploy-static.md)。
 ### 5. 两人怎么连
 1. **她**用手机打开链接 → 注册 → 选「学员（她）」→ 得到 6 位「邀请码」。
 2. **你**用手机打开链接 → 注册 → 选「督学（你）」→ 填入她的邀请码。
@@ -99,6 +99,7 @@ miniprogram/              # 原生微信小程序（见其内 README）
 
 ### 消费级清单与文档
 
+- GitHub Pages 自动部署（master 推送，含测试与 `?demo=1` 验收）：[`.github/workflows/pages.yml`](.github/workflows/pages.yml)
 - 静态部署（WorkBuddy / Vercel / Cloudflare + 域名 + 验收）：[`docs/deploy-static.md`](docs/deploy-static.md)
 - 10 人内测脚本、观察表与修复日志：[`docs/user-testing-kit.md`](docs/user-testing-kit.md)
 - 考研社区发布帖草稿：[`docs/launch-post.md`](docs/launch-post.md)
