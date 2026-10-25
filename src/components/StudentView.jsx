@@ -8,6 +8,7 @@ import DailyWord from './DailyWord'
 import TodayWord from './TodayWord'
 import CheerCard from './CheerCard'
 import MoreTools from './MoreTools'
+import Onboarding from './Onboarding'
 import Mood from './Mood'
 import MemoryEcho from './MemoryEcho'
 const SelfTestModule = lazy(() => import('./SelfTestModule'))
@@ -38,6 +39,11 @@ export default function StudentView({ user, nonce, onSignOut }) {
   const [copied, setCopied] = useState(false)
   const [treeOpen, setTreeOpen] = useState(false)
   const [examLock, setExamLock] = useState(false)
+  const [showOnboard, setShowOnboard] = useState(() => {
+    try {
+      return !user?.guest && !localStorage.getItem('dx_onboarded') && (LS.get('dx_tasks', []) || []).length === 0
+    } catch { return false }
+  })
   const [activeMilestone, setActiveMilestone] = useState(null)
 
   const changed = () => setBump((b) => b + 1)
@@ -172,6 +178,7 @@ export default function StudentView({ user, nonce, onSignOut }) {
       {activeMilestone && (
         <MilestoneCelebrate milestone={activeMilestone} myRole="she" partnerRole="he" partnerName="他" onClose={closeMilestone} />
       )}
+      {showOnboard && <Onboarding onDone={() => setShowOnboard(false)} />}
       {treeOpen && (
         <div className="code-mask" onClick={() => setTreeOpen(false)}>
           <div className="code-modal" onClick={(e) => e.stopPropagation()}>

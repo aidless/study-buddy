@@ -332,3 +332,6 @@ select.input { appearance: none; }
 @keyframes tdl-up { from { transform: translateY(40px); opacity: .4; } to { transform: translateY(0); opacity: 1; } }
 .empty { text-align: center; color: var(--ink-soft); padding: 40px 0; font-size: 13px; }
 .loading { min-height: 100dvh; display: flex; align-items: center; justify-content: center; }
+.onboard-dots { display: flex; gap: 6px; margin-bottom: 14px; }
+.onboard-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--line); transition: width .2s, background .2s; }
+.onboard-dots span.on { width: 18px; border-radius: 999px; background: var(--primary); }

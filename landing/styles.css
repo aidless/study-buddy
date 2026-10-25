@@ -409,3 +409,33 @@ details p { margin: 0 0 18px; font-size: 13.5px; color: var(--ink-soft); line-he
 .legal a { color: var(--green-deep); text-decoration: underline; text-underline-offset: 3px; }
 .legal-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--green-deep); margin-top: 28px; }
 @media (max-width: 560px) { .legal { padding: 40px 18px 64px; } }
+
+/* Demo video */
+.demo-wrap { display: grid; grid-template-columns: 0.85fr 1fr; gap: 54px; align-items: center; }
+.demo-media { display: flex; justify-content: center; }
+.demo-video {
+  width: min(300px, 70vw); height: auto; border-radius: 28px;
+  background: #18231d; border: 9px solid #18231d;
+  box-shadow: var(--shadow); transform: rotate(-1.5deg);
+}
+.demo-copy h3 { font-family: var(--serif); font-size: clamp(1.4rem, 2.3vw, 1.9rem); margin: 0 0 12px; }
+.demo-copy > p { font-size: 14.5px; color: var(--ink-soft); margin: 0 0 14px; }
+.demo-copy .btn { margin-top: 8px; }
+
+/* Install */
+.install-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.install-card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
+  padding: 24px; box-shadow: var(--shadow-soft);
+}
+.install-card h3 { font-size: 16px; margin: 0 0 10px; }
+.install-card p, .install-card li { font-size: 13.5px; color: var(--ink-soft); line-height: 1.8; }
+.install-card ol { padding-left: 20px; margin: 0; }
+.install-card li { margin: 4px 0; }
+
+@media (max-width: 960px) {
+  .demo-wrap { grid-template-columns: 1fr; gap: 26px; }
+  .demo-media { order: 0; }
+  .demo-copy { order: 1; }
+  .install-grid { grid-template-columns: 1fr; }
+}

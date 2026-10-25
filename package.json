@@ -10,7 +10,8 @@
     "test": "vitest run && node scripts/verify_qbank.mjs",
     "verify:bank": "node scripts/verify_qbank.mjs",
     "test:unit": "vitest run",
-    "test:migrate": "node test/migrateLocalToCloud.test.mjs"
+    "test:migrate": "node test/migrateLocalToCloud.test.mjs",
+    "build:site": "npm run build && cp -r landing dist/landing"
   },
   "dependencies": {
     "@capacitor/android": "^6.2.1",

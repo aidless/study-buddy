@@ -6,6 +6,7 @@ import SupervisorView from './components/SupervisorView'
 import { loadProfile, signOut, subscribe, USE_SUPABASE } from './lib/db'
 import { setupOta } from './lib/ota'
 import { setupPush } from './lib/push'
+import { track } from './lib/analytics'
 
 export default function App() {
   const [user, setUser] = useState(undefined)
@@ -14,6 +15,7 @@ export default function App() {
   useEffect(() => {
     setupOta()
     setupPush()
+    track('app_open')
     loadProfile().then((u) => setUser(u))
   }, [])
 

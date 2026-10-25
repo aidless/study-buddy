@@ -2,11 +2,13 @@ import { useState } from 'react'
 import Icon from './Icon'
 import { markWantPraise } from '../lib/db'
 import Backup from './Backup'
+import Feedback from './Feedback'
 
 export default function MoreTools({ onSignOut }) {
   const [open, setOpen] = useState(false)
   const [praised, setPraised] = useState(false)
   const [showBackup, setShowBackup] = useState(false)
+  const [showFeedback, setShowFeedback] = useState(false)
   const [notifOn, setNotifOn] = useState(() => {
     try { return localStorage.getItem('dx_remind') === '1' } catch { return false }
   })
@@ -35,11 +37,13 @@ export default function MoreTools({ onSignOut }) {
           </div>
           <div className="more-item" onClick={toggleNotif}><Icon name="bell" size={20} /> {notifOn ? '提醒已开' : '开启提醒'}</div>
           <div className="more-item" onClick={() => setShowBackup(true)}><Icon name="doc" size={20} /> 数据备份</div>
+          <div className="more-item" onClick={() => { setOpen(false); setShowFeedback(true) }}><Icon name="chat" size={20} /> 反馈</div>
           <div className="more-item" onClick={onSignOut}><Icon name="exit" size={20} /> 退出登录</div>
           <div className="more-item" onClick={() => window.location.reload()}><Icon name="refresh" size={20} /> 刷新</div>
         </div>
       )}
       {showBackup && <Backup onClose={() => setShowBackup(false)} />}
+      {showFeedback && <Feedback onClose={() => setShowFeedback(false)} />}
     </div>
   )
 }

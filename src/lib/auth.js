@@ -114,7 +114,8 @@ const PROFILE_TTL = 3000
 
 export async function loadProfile() {
   if (typeof window !== 'undefined') {
-    const g = new URLSearchParams(window.location.search).get('guest')
+    const params = new URLSearchParams(window.location.search)
+    const g = params.get('guest') || (params.get('demo') === '1' ? 'student' : null)
     if (g) {
       const role = g === 'supervisor' ? 'supervisor' : 'student'
       return { id: 'guest-' + role, name: role === 'supervisor' ? '体验督学' : '体验学员', role, coupleId: 'guest-couple', coupleCode: 'GUEST1', guest: true }

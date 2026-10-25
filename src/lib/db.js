@@ -16,6 +16,7 @@ import { sendRevive, getReviveDates } from './revive.js'
 import { listWrongItems, putWrongItem, removeWrongItem, setWrongMastered, redoWrongItem } from './wrongItemsHybrid.js'
 import { hasLocalData, migrateLocalToCloud, buildMigrationPlan } from './migrateLocalToCloud.js'
 import { collectWrongToBook } from './quizWrong.js'
+import { track } from './analytics.js'
 
 export {
   supabase, USE_SUPABASE, LS, uid, genCode, todayStr, daysUntil, fmtDur, dayOf,
@@ -61,12 +62,14 @@ export async function addTask({ title, date, time }) {
 export async function toggleTask(id, done) {
   if (USE_SUPABASE) {
     await supabase.from('tasks').update({ done: !!done }).eq('id', id)
+    if (done) track('task_done')
     return
   }
   const all = LS.get('dx_tasks', [])
   const t = all.find((x) => x.id === id)
   if (t) t.done = !!done
   LS.set('dx_tasks', all)
+  if (done) track('task_done')
 }
 export async function removeTask(id) {
   if (USE_SUPABASE) {
@@ -104,6 +107,7 @@ export async function toggleCheckin(note) {
   if (idx >= 0) { all.splice(idx, 1); LS.set('dx_checkins', all); return false }
   all.push({ id: uid(), coupleId: me.coupleId, userId: me.id, date: d, note: note || '', at: new Date().toISOString() })
   LS.set('dx_checkins', all)
+  track('checkin')
   return true
 }
 
@@ -121,6 +125,7 @@ export async function addFocusSession({ durationSec, taskId, status, note }) {
   const all = LS.get('dx_focus', [])
   all.push({ id: uid(), coupleId: me.coupleId, userId: me.id, durationSec: Math.max(0, durationSec || 0), taskId: taskId || null, startedAt: new Date().toISOString(), status: status || 'done', note: note || null })
   LS.set('dx_focus', all)
+  track('focus_done', { minutes: Math.round((durationSec || 0) / 60) })
 }
 
 /* ---------------- 实时状态（督学端看她在干嘛） ---------------- */

@@ -13,7 +13,8 @@ function ymd(d) {
 
 export function seedGuestDemo() {
   try {
-    const guest = new URLSearchParams(location.search).get('guest')
+    const params = new URLSearchParams(location.search)
+    const guest = params.get('guest') || (params.get('demo') === '1' ? 'student' : null)
     if (guest !== 'student') return
     if (localStorage.getItem(KEY)) return
     if ((localStorage.getItem('dx_tasks') || '').includes(COUPLE)) return

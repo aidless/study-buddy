@@ -9,10 +9,6 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <svg class="sprite" aria-hidden="true" focusable="false">
-    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  </svg>
-
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="index.html" aria-label="督学 · 返回首页">
@@ -23,6 +19,9 @@
     </div>
   </header>
 
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
 
   <main class="legal">
     <h1>数据说明</h1>
@@ -46,7 +45,7 @@
     <ul>
       <li>不卖数据，不做广告画像；</li>
       <li>不把数据用于训练模型；</li>
-      <li>不默认接入第三方分析。若未来加入访问统计，会在本页列出服务商与字段，并尽量采用不含个人标识的聚合统计。</li>
+      <li>不默认接入第三方分析。若部署者在页面里启用 Plausible / Umami 等访问统计，会记录事件名、页面路径与匿名设备信息，不包含任务、树洞或悄悄话内容；当前版本默认未接入。</li>
     </ul>
 
     <h2>4. 怎么删除</h2>

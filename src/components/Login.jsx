@@ -35,6 +35,20 @@ export default function Login({ onAuth }) {
   const [err, setErr] = useState('')
   const [busy, setBusy] = useState(false)
 
+  const quickStart = async () => {
+    setErr('')
+    setBusy(true)
+    try {
+      const user = await register({ name: name || '同学', role: 'student' })
+      await maybeMigrate(user)
+      onAuth(user)
+    } catch (e) {
+      setErr(e.message || '出错了，请重试')
+    } finally {
+      setBusy(false)
+    }
+  }
+
   const submit = async () => {
     setErr('')
     setBusy(true)
@@ -150,9 +164,14 @@ export default function Login({ onAuth }) {
         {busy ? '处理中…' : tab === 'login' ? '进入' : '创建账号'}
       </button>
       {!USE_SUPABASE && (
-        <div className="tiny" style={{ textAlign: 'center', marginTop: 12 }}>
-          本地模式无需密码，直接创建即可体验
-        </div>
+        <>
+          <button className="btn ghost block" style={{ marginTop: 8 }} onClick={quickStart} disabled={busy}>
+            先不取名，直接开始
+          </button>
+          <div className="tiny" style={{ textAlign: 'center', marginTop: 12 }}>
+            本地模式无需密码，直接创建即可体验
+          </div>
+        </>
       )}
     </div>
   )
