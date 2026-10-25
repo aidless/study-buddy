@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-CN" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>督学 · 考研长线陪伴</title>
+  <meta name="description" content="按 11408 课纲自动排好今天该做的 3 件事；番茄钟、情绪兜底、和在乎的人互写一句话。考研这一年，别一个人硬扛。" />
+  <meta name="theme-color" content="#2f9e6e" />
+  <meta property="og:title" content="督学 · 考研长线陪伴" />
+  <meta property="og:description" content="陪跑不监工。今天先做 3 件事，就够了。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/og.png" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <script>document.documentElement.classList.remove("no-js");document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.2s-7.6-4.6-7.6-10A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.6 3c0 5.4-7.6 10-7.6 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 16v-4M12.5 16V7M17 16v-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="10.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 5.5h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 6.5A3.5 3.5 0 0 1 7.5 3h9A3.5 3.5 0 0 1 20 6.5v6a3.5 3.5 0 0 1-3.5 3.5H10l-4.5 4v-4.4A3.5 3.5 0 0 1 4 12.5v-6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5 13.8 9l5.5 1.8-5.5 1.8L12 18l-1.8-5.4L4.7 10.8 10.2 9 12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="督学 · 回到顶部">
+        <span class="brand-mark"><svg class="icon"><use href="#i-check"/></svg></span>
+        <span class="brand-text"><strong>督学</strong><small>考研长线陪伴</small></span>
+      </a>
+      <nav class="nav" id="site-nav" aria-label="主导航">
+        <a href="#why">为什么</a>
+        <a href="#features">能做什么</a>
+        <a href="#day">一天怎么用</a>
+        <a href="#privacy">数据在哪</a>
+        <a href="#faq">常见问题</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-ghost" data-app-link data-demo href="../?guest=student">先看看</a>
+        <a class="btn btn-primary" data-app-link href="../">开始使用</a>
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="打开菜单" aria-expanded="false" aria-controls="site-nav">
+        <svg class="icon icon-menu"><use href="#i-menu"/></svg>
+        <svg class="icon icon-close"><use href="#i-close"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> 考研长线陪伴 · 本地优先</p>
+        <h1>考研这一年，<br><em>别一个人硬扛。</em></h1>
+        <p class="lead">按 11408 课纲自动排好今天该做的 3 件事；番茄钟、情绪兜底、和在乎的人互写一句话。打开就能用，数据默认留在你自己的手机里。</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" data-app-link data-demo href="../?guest=student">免注册，先看看</a>
+          <a class="btn btn-outline btn-lg" data-app-link href="../">开始使用<svg class="icon icon-arrow"><use href="#i-arrow"/></svg></a>
+        </div>
+        <ul class="hero-facts" aria-label="产品特点">
+          <li><svg class="icon"><use href="#i-check"/></svg>无需注册</li>
+          <li><svg class="icon"><use href="#i-phone"/></svg>手机可安装</li>
+          <li><svg class="icon"><use href="#i-lock"/></svg>本地优先</li>
+        </ul>
+      </div>
+
+      <div class="hero-visual reveal" aria-label="督学 App 截图">
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="phone phone-main">
+          <div class="phone-notch" aria-hidden="true"></div>
+          <img src="assets/today.webp" width="390" height="844" alt="督学今日页面：倒计时、今日打卡、按 11408 课纲生成的今日建议和任务清单" />
+        </div>
+        <div class="float-card float-streak" aria-hidden="true">
+          <span>连续</span><strong>12</strong><span>天</span>
+        </div>
+        <div class="float-card float-tasks" aria-hidden="true">
+          <strong>2/3</strong><span>今日完成</span>
+        </div>
+        <div class="float-note" aria-hidden="true">
+          <svg class="icon"><use href="#i-heart"/></svg>
+          <span>陪跑，不监工</span>
+        </div>
+      </div>
+    </section>
+
+    <p class="philosophy reveal">“陪跑不监工。对方的数字默认不主动推送，想看才点开。”</p>
+
+    <section class="section why" id="why">
+      <div class="section-head reveal">
+        <p class="kicker">为什么做它</p>
+        <h2>最难的不是不会学，<br>是不知道今天算不算完成。</h2>
+        <p class="section-lead">计划写得很大：“今天看高数”。执行时无从判断做没做完，既没有进度感，也没有挫败感——第二天继续写一遍。我们把任务拆到带时长、可勾选的粒度，让完成变得可见。</p>
+      </div>
+      <div class="principles">
+        <article class="principle reveal">
+          <span class="principle-icon"><svg class="icon"><use href="#i-heart"/></svg></span>
+          <h3>先护情绪，再谈分数</h3>
+          <p>倒计时措辞从“紧迫”转“陪伴”，可以收起；树洞与 60 秒呼吸兜底。为提升分数而加重焦虑的改动，一票否决。</p>
+        </article>
+        <article class="principle reveal">
+          <span class="principle-icon"><svg class="icon"><use href="#i-calendar"/></svg></span>
+          <h3>打开就有方向</h3>
+          <p>按 11408 课纲自动排好今日建议，不用先做一份完美计划。也可以加自己的任务、一键打印。</p>
+        </article>
+        <article class="principle reveal">
+          <span class="principle-icon"><svg class="icon"><use href="#i-chart"/></svg></span>
+          <h3>看见自己在走</h3>
+          <p>30 天专注热力图、近 7 天柱状图、连续天数。不是评判，是让她知道“我真的在往前走”。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section features" id="features">
+      <div class="section-head reveal">
+        <p class="kicker">能做什么</p>
+        <h2>一个 App，接住考研的一天。</h2>
+        <p class="section-lead">从早上打开到晚上收工，每个环节都尽量少做决定、少添焦虑。</p>
+      </div>
+
+      <article class="feature-row reveal">
+        <div class="feature-copy">
+          <span class="feature-tag">今日</span>
+          <h3>今天只做 3 件事</h3>
+          <p>打开就有按 11408 课纲排好的今日建议；完成一件勾一件。也可以写自己的任务，支持一键打印。</p>
+          <ul class="ticks">
+            <li>开箱即用，不用先规划</li>
+            <li>今日完成率与连续天数实时更新</li>
+          </ul>
+        </div>
+        <div class="feature-media">
+          <div class="phone phone-small"><img src="assets/today.webp" width="390" height="844" alt="今日建议与任务清单" /></div>
+        </div>
+      </article>
+
+      <article class="feature-row reverse reveal">
+        <div class="feature-copy">
+          <span class="feature-tag">专注</span>
+          <h3>25 分钟，先动起来</h3>
+          <p>番茄钟自动累计今日专注；焦虑上来时，跟着 60 秒呼吸把人拉回来。不需要意志力爆棚，只需要开始。</p>
+          <ul class="ticks">
+            <li>25 分钟专注 / 5 分钟休息</li>
+            <li>专注时长进入热力图与周趋势</li>
+          </ul>
+        </div>
+        <div class="feature-media">
+          <div class="phone phone-small"><img src="assets/focus.webp" width="390" height="844" alt="专注番茄钟与 60 秒深呼吸" /></div>
+        </div>
+      </article>
+
+      <article class="feature-row reveal">
+        <div class="feature-copy">
+          <span class="feature-tag">进度</span>
+          <h3>把“我好像没学”变成证据</h3>
+          <p>30 天热力图、近 7 天柱状图、连续天数，加上今日任务完成率。不是拿来比较，是拿来确认自己真的在走。</p>
+          <ul class="ticks">
+            <li>按科目看自测正确率与趋势</li>
+            <li>连续天数、累计专注、今日专注一屏可见</li>
+          </ul>
+        </div>
+        <div class="feature-media">
+          <div class="phone phone-small"><img src="assets/progress.webp" width="390" height="844" alt="学习进度：连续天数、专注热力图与近 7 天柱状图" /></div>
+        </div>
+      </article>
+
+      <article class="feature-row reverse reveal">
+        <div class="feature-copy">
+          <span class="feature-tag">情绪</span>
+          <h3>有些话，不用对谁说</h3>
+          <p>树洞只有她自己能看到，写完就关；今日一句话两人互写，是情感锚点，不是考核。呼吸练习给情绪一个出口。</p>
+          <ul class="ticks">
+            <li>树洞不推送、不评判</li>
+            <li>今日一句话、送鼓励、悄悄话</li>
+          </ul>
+        </div>
+        <div class="feature-media">
+          <div class="phone phone-small"><img src="assets/mood.webp" width="390" height="844" alt="树洞：只自己可见的碎碎念与情绪记录" /></div>
+        </div>
+      </article>
+
+      <article class="feature-row reveal">
+        <div class="feature-copy">
+          <span class="feature-tag">规划</span>
+          <h3>11408 的方向感</h3>
+          <p>D-day 倒计时、四科阶段目标、自测正确率；按课纲轮转的周计划，让她始终知道下一步该啃哪块。</p>
+          <ul class="ticks">
+            <li>考研 11408 专属，也可切换其他考试</li>
+            <li>目标分与单科目标，按权重看最亏分</li>
+          </ul>
+        </div>
+        <div class="feature-media">
+          <div class="phone phone-small"><img src="assets/plan.webp" width="390" height="844" alt="备考规划：倒计时、目标总分与单科目标" /></div>
+        </div>
+      </article>
+
+      <div class="mini-grid">
+        <article class="mini-card reveal">
+          <span class="mini-icon"><svg class="icon"><use href="#i-spark"/></svg></span>
+          <h3>AI 名师（内测）</h3>
+          <p>答疑、讲题、作文批改、学习规划，结合她的错题与自测。需要配置 AI 服务后使用。</p>
+        </article>
+        <article class="mini-card reveal">
+          <span class="mini-icon"><svg class="icon"><use href="#i-chat"/></svg></span>
+          <h3>双向陪跑</h3>
+          <p>督学端从“看她数据”改成“陪她”：互写一句话、送鼓励、发悄悄话。数字默认不主动推送。</p>
+        </article>
+        <article class="mini-card reveal">
+          <span class="mini-icon"><svg class="icon"><use href="#i-phone"/></svg></span>
+          <h3>三种打开方式</h3>
+          <p>PWA 加到主屏、Android App、微信小程序。手机浏览器打开就能用，无需应用商店。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section day" id="day">
+      <div class="section-head reveal">
+        <p class="kicker">一天怎么用</p>
+        <h2>不靠自律爆发，靠一条顺手的路径。</h2>
+      </div>
+      <ol class="timeline">
+        <li class="reveal">
+          <span class="time">07:30</span>
+          <div><h3>打开，看到今天 3 件事</h3><p>不用先想“学什么”，按课纲排好的建议已经在。</p></div>
+        </li>
+        <li class="reveal">
+          <span class="time">09:00</span>
+          <div><h3>开一个番茄钟</h3><p>25 分钟只做一件事；结束后休息 5 分钟，专注时长自动累计。</p></div>
+        </li>
+        <li class="reveal">
+          <span class="time">22:30</span>
+          <div><h3>打卡，写一句话</h3><p>看一眼今天的完成率；想说话就写今日一句话，不想说就丢进树洞。</p></div>
+        </li>
+        <li class="reveal">
+          <span class="time">周日</span>
+          <div><h3>看趋势，不审判</h3><p>热力图和周趋势告诉她这周走了多远；下周的计划已经按课纲轮转好。</p></div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section privacy" id="privacy">
+      <div class="privacy-panel reveal">
+        <div class="privacy-copy">
+          <p class="kicker">数据在哪</p>
+          <h2>默认留在你的手机里。</h2>
+          <p>本地模式不需要注册、不需要服务器：任务、专注、打卡、树洞都只存在当前浏览器。想两个人远程同步时，再配置 Supabase；权限按小组隔离，只有你们两个人能看到。</p>
+          <ul class="privacy-list">
+            <li><svg class="icon"><use href="#i-lock"/></svg><span><strong>本地优先</strong>：不配置云端也能用完所有单人功能</span></li>
+            <li><svg class="icon"><use href="#i-lock"/></svg><span><strong>云端可选</strong>：Supabase 行级安全，按小组隔离</span></li>
+            <li><svg class="icon"><use href="#i-lock"/></svg><span><strong>诚实边界</strong>：清浏览器缓存会丢本地数据，重要记录请用云端或备份</span></li>
+          </ul>
+        </div>
+        <div class="privacy-badge" aria-hidden="true">
+          <svg class="icon"><use href="#i-lock"/></svg>
+          <span>Local<br>first</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq" id="faq">
+      <div class="section-head reveal">
+        <p class="kicker">常见问题</p>
+        <h2>开始之前，你可能想问。</h2>
+      </div>
+      <div class="faq-list">
+        <details class="reveal">
+          <summary>需要注册吗？</summary>
+          <p>不需要。本地模式下起个昵称就能用；只有想两个人远程同步时，才需要配置 Supabase 账号。</p>
+        </details>
+        <details class="reveal">
+          <summary>我的数据会被上传吗？</summary>
+          <p>默认不会，本地模式的数据只存在你自己的浏览器里。配置云端同步后，数据存在你自己的 Supabase 项目里，按小组隔离。清缓存会丢本地数据，重要记录请用云端或备份。</p>
+        </details>
+        <details class="reveal">
+          <summary>支持哪些考试？</summary>
+          <p>以考研 11408 为主，也支持专升本、高考、考公考编等考试类型切换；不同考试的规划模块会有所不同。</p>
+        </details>
+        <details class="reveal">
+          <summary>AI 名师要额外付费吗？</summary>
+          <p>AI 名师目前是内测功能，需要配置 AI 服务后使用；它不是默认可用，也不影响今日建议、番茄钟、进度与情绪模块。</p>
+        </details>
+        <details class="reveal">
+          <summary>手机上怎么安装？</summary>
+          <p>手机浏览器打开后点“添加到主屏幕”，体验等同 App；也可以使用 Android 安装包或微信小程序（内测中）。</p>
+        </details>
+        <details class="reveal">
+          <summary>它是心理治疗工具吗？</summary>
+          <p>不是。树洞、呼吸和今日一句话是日常支持工具，不能替代专业心理咨询或医疗帮助。如果情绪持续低落，请寻求专业支持。</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="cta-band reveal">
+      <div>
+        <p class="kicker">今天先做 3 件事</p>
+        <h2>就够了。</h2>
+        <p>不用等一个完美的开始。打开，勾掉第一件。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-cream btn-lg" data-app-link data-demo href="../?guest=student">免注册，先看看</a>
+        <a class="btn btn-outline-cream btn-lg" data-app-link href="../">开始使用<svg class="icon icon-arrow"><use href="#i-arrow"/></svg></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark"><svg class="icon"><use href="#i-check"/></svg></span>
+        <div><strong>督学</strong><p>考研长线陪伴 · 陪跑不监工</p></div>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/aidless/study-buddy" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/aidless/study-buddy/issues" target="_blank" rel="noreferrer">反馈</a>
+        <a href="privacy.html">数据说明</a>
+        <a href="#faq">常见问题</a>
+      </div>
+      <p class="footer-note">内测版 · 不是医疗器械，不替代专业心理支持 · <span id="year">2026</span></p>
+    </div>
+  </footer>
+
+  <script src="landing.js"></script>
+</body>
+</html>

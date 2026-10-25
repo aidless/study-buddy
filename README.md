@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  [![CI](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)
 给好朋友用的考研长线陪伴 + 双向督学小工具。手机浏览器打开、加到主屏，体验等同 App，无需上架应用商店。
+
+**着陆页：** [`landing/`](landing/) · **免注册演示：** 在应用地址后加 `?guest=student`（自动灌入示例任务、专注与打卡）
 ## 设计哲学
 
 这不止是一个督学 App，而是 **人文关怀 × 心理学 × 考研分数规划** 的三重组合：
@@ -87,6 +89,12 @@ src/
 supabase-all-in-one.sql   # 建表 + RLS（含 countdown / phase_goals / self_tests）
 miniprogram/              # 原生微信小程序（见其内 README）
 ```
+
+## 着陆页与演示模式
+
+`landing/` 是一个独立的静态着陆页（无构建、无外部依赖），用于把第一次访问的人带进产品。预览、部署和重新截图的方法见 [`landing/README.md`](landing/README.md)。
+
+应用支持访客演示：URL 加 `?guest=student` 会以「体验学员」身份进入，并在首次访问时灌入一组示例任务、20 天专注、12 天打卡与目标分；演示数据只存在当前浏览器，不会覆盖已登录账号的本地数据。
 
 ## 说明与后续可加
 - 推送提醒：Web Push 在 iOS Safari 支持有限，当前用「加到主屏 + 打开即看」的方式替代；如需强提醒可后续接微信服务号模板消息。

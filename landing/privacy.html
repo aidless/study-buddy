@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数据说明 · 督学</title>
+  <meta name="theme-color" content="#2f9e6e" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="督学 · 返回首页">
+        <span class="brand-mark"><svg class="icon"><use href="#i-check"/></svg></span>
+        <span class="brand-text"><strong>督学</strong><small>考研长线陪伴</small></span>
+      </a>
+      <a class="btn btn-ghost" href="index.html" style="margin-left:auto">返回首页</a>
+    </div>
+  </header>
+
+
+  <main class="legal">
+    <h1>数据说明</h1>
+    <p class="updated">最后更新：2026-10-25 · 内测版</p>
+
+    <p>督学默认把数据留在你自己的设备上。这份说明写清楚：我们存什么、存在哪、怎么删，以及哪些事情我们不做。</p>
+
+    <h2>1. 我们存什么</h2>
+    <ul>
+      <li>昵称、角色（学员 / 督学）、邀请码；</li>
+      <li>你主动录入的内容：任务、专注记录、打卡、自测、倒计时、目标分、阶段目标、今日一句话、树洞、悄悄话；</li>
+      <li>运行所需的最小本地状态，例如是否已看过某条里程碑提示。</li>
+    </ul>
+    <p>我们不收集通讯录、精确位置、广告标识符，也不读取你设备上的其他文件。</p>
+
+    <h2>2. 数据存在哪</h2>
+    <p><strong>本地模式（默认）：</strong>上述数据只存在当前浏览器的 localStorage 里。它不会上传到我们的服务器；清除浏览器数据、换浏览器或换设备后无法恢复。</p>
+    <p><strong>云端同步（可选）：</strong>如果你自行配置 Supabase，数据会写入你自己的 Supabase 项目（Postgres + Auth + Storage）。表启用了行级安全（RLS），只有同一小组的两个人能读取对应数据。Supabase 的可用性、备份与计费由你和 Supabase 的协议决定。</p>
+
+    <h2>3. 我们不做什么</h2>
+    <ul>
+      <li>不卖数据，不做广告画像；</li>
+      <li>不把数据用于训练模型；</li>
+      <li>不默认接入第三方分析。若未来加入访问统计，会在本页列出服务商与字段，并尽量采用不含个人标识的聚合统计。</li>
+    </ul>
+
+    <h2>4. 怎么删除</h2>
+    <ul>
+      <li><strong>本地模式：</strong>清除浏览器站点数据即可；也可以在应用内删除任务、打卡等记录。</li>
+      <li><strong>云端模式：</strong>在 Supabase 控制台删除对应行、用户或整个项目。当前内测版没有一键注销入口；需要协助可以在 GitHub Issues 里提。</li>
+    </ul>
+
+    <h2>5. 情绪支持不是医疗</h2>
+    <p>树洞、60 秒呼吸和今日一句话是日常支持工具，不是心理治疗或医疗建议，也不能替代专业帮助。如果你或你关心的人持续情绪低落、出现伤害自己的想法，请联系当地的专业心理支持或急救服务。</p>
+
+    <h2>6. 年龄</h2>
+    <p>本产品面向备考的成年人及高中生，不面向 14 岁以下儿童。若你是未成年人，请在监护人知情的情况下使用。</p>
+
+    <h2>7. 联系</h2>
+    <p>数据相关问题、删除协助或安全报告：<a href="https://github.com/aidless/study-buddy/issues" target="_blank" rel="noreferrer">GitHub Issues</a>。请不要在公开 issue 里粘贴真实的私人内容。</p>
+
+    <a class="legal-back" href="index.html">← 返回首页</a>
+  </main>
+</body>
+</html>
