@@ -100,6 +100,7 @@ miniprogram/              # 原生微信小程序（见其内 README）
 ### 消费级清单与文档
 
 - GitHub Pages 自动部署（master 推送，含测试与 `?demo=1` 验收）：[`.github/workflows/pages.yml`](.github/workflows/pages.yml)
+- 真实用户验证状态（当前真实用户 0，未招募）：[`docs/user-validation-status.md`](docs/user-validation-status.md)
 - 静态部署（WorkBuddy / Vercel / Cloudflare + 域名 + 验收）：[`docs/deploy-static.md`](docs/deploy-static.md)
 - 10 人内测脚本、观察表与修复日志：[`docs/user-testing-kit.md`](docs/user-testing-kit.md)
 - 考研社区发布帖草稿：[`docs/launch-post.md`](docs/launch-post.md)
