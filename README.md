@@ -116,6 +116,29 @@ npm run build:site      # build + copy landing/ into dist/landing
 
 Android APK 与微信小程序仍是内测状态：本机没有 Android SDK/小程序 AppID，未构建、未上传；landing 与 README 都按“内测中”写，不放未经验证的二维码或下载链接。
 
+## 测试与复算
+
+```bash
+npm ci                 # 安装依赖
+npm test               # = vitest run（4 文件 11 测试）+ 题库校验（20 项 ALL_OK）
+```
+
+实测（2026-11-01，Node 24 / 正常路径）：`Test Files 4 passed, Tests 11 passed`，题库校验 `ALL_OK`（真题 720 道 / 18 年 / 每题 4 选项，大题 85 道，政治 100 / 英语一 122 / 数学一 126 / 作文 16 / 解答题 24）。
+
+> ⚠️ **本工作区路径注意**：`F:\deepseek` 这类含反斜杠的路径会破坏 Node ESM 模块解析（`ERR_INVALID_MODULE_SPECIFIER`），`npm test` 在此路径下会报 `vitest: not found`。复算时请把仓库放到无反斜杠路径（如 `/tmp/study-buddy`）再跑。这是环境限制，不是代码缺陷——云端 CI（`.github/workflows/pages.yml`，ubuntu 路径）不受影响。
+
+## 边界声明（证明什么 / 不证明什么）
+
+**证明什么**：
+- 本地模式完整可运行：`?demo=1` 演示路径（合成数据）、今日建议、任务完成状态流转（localStorage `dx_tasks` 2→3）、进度可视化在 390×844 手机视口无横向溢出（2026-10-27 Chromium 本地验收，见 [`docs/user-validation-status.md`](docs/user-validation-status.md)）。
+- 单元测试与题库校验通过（11 测试 + 20 项题库不变量）。
+
+**不证明什么**（fail-closed 边界）：
+- **真实用户验证未开始**：当前真实用户 0、招募未开始；`?demo=1` 用合成数据，**不能替代真实用户**。任何「通过 10 人内测」式表述在真实证据达标前一律不得对外使用（`docs/user-validation-status.md` 明示）。
+- 不证明留存、增长、付费、或「消费级」已达成；不证明陌生人能无提示完成首次任务、48 小时续用、Supabase 多设备稳定、或 PWA 在各 iOS/Android 版本行为一致。
+- 云端同步（Supabase）未在真实网络与多设备上验证；RLS 已写好但只在代码层面，未做多用户实战测试。
+- Android APK / 微信小程序是内测状态，本机无 SDK/AppID，未构建、未上传；README 按「内测中」写，不放未经验证的二维码或下载链接。
+
 ## 说明与后续可加
 - 推送提醒：Web Push 在 iOS Safari 支持有限，当前用「加到主屏 + 打开即看」的方式替代；如需强提醒可后续接微信服务号模板消息。
 - 按科目拆分的周计划可后续扩展。
