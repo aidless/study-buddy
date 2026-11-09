@@ -3,10 +3,16 @@
 // 用法：先 `npm run build && npm run preview`，再 `node test/vm_sync_e2e.mjs`
 import puppeteer from 'puppeteer-core'
 import { mkdirSync, writeFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const URL = 'http://127.0.0.1:4173'
-const EDGE = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-const SHOTS = 'C:/Users/Administrator/AppData/Roaming/haolo_desktop/thread-groups/default/科研/outputs/vm-e2e'
+const URL = process.env.APP_URL || 'http://127.0.0.1:4173'
+const EDGE = process.env.BROWSER_PATH || ''
+const SHOTS = process.env.SHOTS_DIR || path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '.local', 'vm-e2e')
+if (!EDGE) {
+  console.error('Manual script, not part of npm test or CI. Set BROWSER_PATH to Chrome or Edge. Optional APP_URL and SHOTS_DIR (default .local/vm-e2e). Needs a running preview and a configured cloud backend.')
+  process.exit(2)
+}
 mkdirSync(SHOTS, { recursive: true })
 
 const ts = Date.now()

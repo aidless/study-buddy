@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """生成数学一解答题（高数 8 / 线代 8 / 概率 8，带详细解答）"""
 import io, os, json
-OUT = r'F:\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
+OUT = os.environ.get("STUDY_BUDDY_OUT", "outputs/src/lib")  # 原写作者桌面工作区；现默认仓库内 outputs/
 
 probs = [
  ('高数', '计算极限 lim(x→0) sin(3x)/x。',

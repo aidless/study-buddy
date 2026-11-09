@@ -24,7 +24,7 @@ jobs:
           node-version: 20
           cache: npm
       - name: Install
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Test
         run: npm test
       - name: Build app + landing

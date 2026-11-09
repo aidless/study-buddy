@@ -1,9 +1,66 @@
 # 给她 · 考研陪伴（PWA）
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  [![CI](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)
-给好朋友用的考研长线陪伴 + 双向督学小工具。手机浏览器打开、加到主屏，体验等同 App，无需上架应用商店。
+STATUS: WORK-IN-PROGRESS — not A yet
 
-**在线体验：** https://aidless.github.io/study-buddy/?demo=1 · **着陆页：** https://aidless.github.io/study-buddy/landing/ · **免注册演示：** 在应用地址后加 `?demo=1`（也兼容 `?guest=student`；自动灌入示例任务、专注与打卡）
+正在备考的人可以在手机浏览器里记下今天的任务、用番茄钟，并写一句话、树洞或做一分钟呼吸；数据默认只在本机，Supabase 同步和 AI 名师都要另外配置。
+本仓库不提供完成率提升的测量、用户研究、对照组、下载量或 PyPI 包，也没有 FastAPI，没有「任务拆开就能提高完成率」的实验。
+不需要 API key 的检查是 `npm ci && npm test`，本地界面是 `npm run dev`。演示页 https://aidless.github.io/study-buddy/?demo=1 在 2026-11-09 能进入「体验学员」（合成数据）；CI 不打开这个网址。
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  [![CI](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)](https://github.com/aidless/study-buddy/actions/workflows/ci.yml/badge.svg)
+
+着陆页：https://aidless.github.io/study-buddy/landing/ 。`?guest=student` 与 `?demo=1` 走同一条演示入口。
+
+## 距 A 还差
+
+1. 没有完成率实验。真实用户记录仍是 0（[`docs/user-validation-status.md`](docs/user-validation-status.md)）。自报完成不能写成提升。
+2. AI 名师的「学习规划」没有离线评测。Supabase 项目在 2026-11-09 对 `ai-tutor` 与 `updates` 的响应是 “Project paused”，这两条线上路径当前不可用。
+3. 版本号 0.2.1 与 tag `v0.2.1` 在仓库里。最近一次 Release 工作流（2026-10-22，run 39718382231）在 Android SDK 安装阶段失败（`sdkmanager` 找不到 `tools`）。2026-08-10 有一次成功的 Release run（31400639594），安装包不在本树。旧笔记里的 APK v1.26.0 / versionCode 90 也不是当前 `android/app/build.gradle`（versionName 0.2.1，versionCode 4）。
+4. GitHub About 仍写「PWA + Android App + Supabase + 自建 OTA + 微信小程序」。这些目录都在树里。公开能打开的是 GitHub Pages 上的 PWA。Android 与小程序没有上架。About 文案本 PR 改不了。
+
+## FAILURE_MODES
+
+- LLM split quality：AI 名师在配置了中继、且该中继在线时，可以用「学习规划」按错题和自测记录给出一周安排。仓库没有评测这些拆分是否更小、是否被完成，也没有不带模型密钥就能复现规划质量的夹具。未配置或中继暂停时，名师不可用，任务、番茄钟、情绪页和本地记自测仍可用。
+- Self-report baseline bias：任务是否完成、专注分钟，以及自测里的「快速记录」，都由同一个人写下。没有独立观察的基线。
+- No control group：没有把使用本工具和纸笔计划或不用工具做对照。以后自报完成变多，也不能从这份仓库推出原因。
+
+## 两条路径
+
+### 离线 / 记录（不需要 LLM key）
+
+题库、判分、计划和「本地记录 → 云端载荷」映射都在仓库里，单测不连网、不读密钥。
+
+```bash
+npm ci
+npm test          # Vitest test/unit + scripts/verify_qbank.mjs
+npm run dev       # 本地模式。同一 Wi-Fi 下用终端里的 Network 地址用手机打开
+```
+
+CI 使用 Node 20。选择题对错由随仓库的题库在本地判分。`?demo=1` 灌入的任务、专注和打卡是合成数据，不是用户。
+
+### LLM（可选，不是主路径）
+
+`src/lib/aiTutor.js` 把问题发到 `VITE_AI_TUTOR_URL`，否则发到 `/functions/v1/ai-tutor`。没有这个地址、或地址背后的项目暂停时，调用会失败。CI 不调用它。`node scripts/ai-tutor-relay.mjs` 也不在 `npm test` 里。
+
+## 版本
+
+应用版本 **0.2.1** 写在三处：`package.json`、`capacitor.config.json` 的 `CapacitorUpdater.version`、`android/app/build.gradle` 的 `versionName`（`versionCode` 4）。tag `v0.2.1` 存在。这不是应用商店版本，本树没有 APK。微信小程序 `miniprogram/package.json` 是 0.1.0，未上传。`public/sw.js` 的 `study-buddy-v3` 只是缓存名。没有 PyPI 包。`scripts/*.py` 是题库生成脚本，不是服务。
+
+## CI 实际覆盖
+
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) 在 push / pull request 上执行 `npm ci`、`npm test`、`npm run build`，并用 gitleaks 扫全部历史。不需要 LLM key 或 Supabase。
+
+`npm test` 包含：
+
+- Vitest：`test/unit/**/*.test.js`（含题库抽题判分，以及 `migratePlan.test.js` 对 `buildMigrationPlan` 当前返回值的锁定：按 coupleId 过滤、驼峰字段；不按 owner 过滤）
+- `node scripts/verify_qbank.mjs`
+
+`test/migrateLocalToCloud.test.mjs` 不在 `npm test` 里。旧断言要的是蛇形字段和「只搬本人」，函数实际按 coupleId 过滤并返回驼峰字段。该文件现在直接退出 2。用普通 `node` 导入 `src/lib/supabase.js` 仍会在 `import.meta.env` 上报错；现行单测走 Vitest。
+
+不包含：`test/vm_sync_e2e.mjs`（要本地预览、浏览器和云端账号）、`test/emu_cdp_deep.mjs`（要 adb 与已安装的 APK）、`test/user_perspective_e2e.mjs`（2026-08-08 的残片在 `puppeteer.launch` 处截断，现改为直接退出 2）。这三支都不进 CI。前两支的输出目录默认是仓库下的 `.local/`（可用 `SHOTS_DIR` 改），浏览器路径用 `BROWSER_PATH`。
+
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) 同样先 `npm test`，再 `npm run build:site` 发布到 GitHub Pages。它不在浏览器里打开 `?demo=1`。master 上一次 CI 与 Pages 成功是 2026-10-27；以本次 PR 的 Actions 为准，不把那次绿灯写成永久状态。
+
+[`.github/workflows/release.yml`](.github/workflows/release.yml) 只在 tag `v*` 上跑，目标是签名 APK 和 OTA。它不是测试门禁。最近一次失败原因见上面「距 A 还差」。
 
 ## 设计哲学
 
@@ -99,7 +156,7 @@ miniprogram/              # 原生微信小程序（见其内 README）
 
 ### 消费级清单与文档
 
-- GitHub Pages 自动部署（master 推送，含测试与 `?demo=1` 验收）：[`.github/workflows/pages.yml`](.github/workflows/pages.yml)
+- GitHub Pages（master 推送：`npm test` + `npm run build:site`，不在浏览器里点 `?demo=1`）：[`.github/workflows/pages.yml`](.github/workflows/pages.yml)
 - 真实用户验证状态（当前真实用户 0，未招募）：[`docs/user-validation-status.md`](docs/user-validation-status.md)
 - 静态部署（WorkBuddy / Vercel / Cloudflare + 域名 + 验收）：[`docs/deploy-static.md`](docs/deploy-static.md)
 - 10 人内测脚本、观察表与修复日志：[`docs/user-testing-kit.md`](docs/user-testing-kit.md)
@@ -114,7 +171,7 @@ npm ci
 npm run build:site      # build + copy landing/ into dist/landing
 ```
 
-Android APK 与微信小程序仍是内测状态：本机没有 Android SDK/小程序 AppID，未构建、未上传；landing 与 README 都按“内测中”写，不放未经验证的二维码或下载链接。
+Android 工程和微信小程序源码在树里，没有随仓库发布的安装包，也没有已上传的小程序。landing 与本 README 不放二维码或下载人数。
 
 ## 说明与后续可加
 - 推送提醒：Web Push 在 iOS Safari 支持有限，当前用「加到主屏 + 打开即看」的方式替代；如需强提醒可后续接微信服务号模板消息。

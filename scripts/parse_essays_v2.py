@@ -2,8 +2,8 @@
 """解析 408 综合应用题 v2：兼容独立答案区与内联解答"""
 import io, re, os, json, glob
 
-TXT = r'C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\app\outputs\recovery\408txt'
-OUT = r'F:\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
+TXT = os.environ.get("STUDY_BUDDY_ESSAY_TXT", os.path.join("outputs", "cache", "408txt"))
+OUT = os.environ.get("STUDY_BUDDY_OUT", os.path.join("outputs", "src", "lib"))
 SUBJ = {41: '数据结构', 42: '数据结构', 43: '计算机组成', 44: '计算机组成', 45: '操作系统', 46: '操作系统', 47: '计算机网络'}
 
 def clean(s):
