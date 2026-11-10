@@ -2,7 +2,7 @@
 """生成英语一模拟练习（阅读 30 + 词汇语法 92，共 122）"""
 import io, json, os, random
 random.seed(20260808)
-OUT = r'F:\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
+OUT = os.environ.get("STUDY_BUDDY_OUT", "outputs/src/lib")  # 原写作者桌面工作区；现默认仓库内 outputs/
 
 def mk(qid, topic, stem, opts, answer, analysis, tags):
     return {'id': qid, 'year': 2026, 'subject': '英语一', 'type': 'choice', 'no': 0, 'stem': stem,

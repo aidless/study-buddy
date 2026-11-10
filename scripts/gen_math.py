@@ -2,7 +2,7 @@
 """生成数学一模拟练习（高数48 / 线代42 / 概率36，共126），答案由计算得出"""
 import io, json, os, random
 random.seed(20260808)
-OUT = r'F:\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
+OUT = os.environ.get("STUDY_BUDDY_OUT", "outputs/src/lib")  # 原写作者桌面工作区；现默认仓库内 outputs/
 
 def mk(qid, subject, topic, stem, opts, answer, analysis, tags):
     return {'id': qid, 'year': 2026, 'subject': subject, 'type': 'choice', 'no': 0, 'stem': stem,

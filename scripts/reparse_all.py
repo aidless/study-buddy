@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """全量重解析 2009-2026 + 生成 SEED 文件"""
 import io, re, json, os
-cache = r'C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\app\outputs\recovery\pages'
-out_root = r'F:\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
+cache = os.environ.get("HARVEST_408_CACHE", os.path.join("outputs", "cache", "pages"))
+out_root = os.environ.get("STUDY_BUDDY_OUT", os.path.join("outputs", "src", "lib"))
 SUBJ_MAP = {'数据结构': '数据结构', '组成原理': '计算机组成', '操作系统': '操作系统', '计算机网络': '计算机网络'}
 SUBJ_KEYS = {'数据结构': 'ds', '计算机组成': 'co', '操作系统': 'os', '计算机网络': 'net'}
 

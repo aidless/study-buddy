@@ -15,9 +15,13 @@ jobs:
           cache: npm
       - name: 环境信息
         run: node -v && npm -v
-      - name: 安装依赖（lock 宽容，兼容不同 npm 版本）
-        run: npm install --no-audit --no-fund
-      - name: 题库与逻辑单测
+      - name: 安装依赖（与 lockfile 一致）
+        run: npm ci --no-audit --no-fund
+      - name: 离线单测（无 LLM key、无 Supabase）
+        # npm test = vitest test/unit/**/*.test.js + scripts/verify_qbank.mjs
+        # 不跑 test/migrateLocalToCloud.test.mjs（已退役）、
+        # test/vm_sync_e2e.mjs、test/emu_cdp_deep.mjs、
+        # test/user_perspective_e2e.mjs（见 README「CI 实际覆盖」）
         run: npm test
       - name: Web 构建
         run: npm run build

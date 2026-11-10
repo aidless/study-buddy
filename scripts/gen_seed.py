@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import io, json, os
-root = r'C:\Users\Administrator\AppData\Roaming\haolo_desktop\thread-groups\default\app\outputs\study-buddy\src\lib'
-raw = json.load(io.open(os.path.join(root, 'qbankSeed_raw.json'), encoding='utf-8'))
+raw_path = os.environ.get("QBANK_SEED_RAW", os.path.join("src", "lib", "qbankSeed_raw.json"))
+root = os.environ.get("STUDY_BUDDY_OUT", os.path.join("outputs", "src", "lib"))  # 原写作者桌面工作区
+raw = json.load(io.open(raw_path, encoding='utf-8'))
 print('raw', len(raw))
 # split into A/B/C (2009-2015, 2016-2021, 2022-2025)
 def emit(name, qs):

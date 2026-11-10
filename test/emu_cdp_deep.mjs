@@ -1,9 +1,11 @@
 // emu_cdp_deep.mjs —— 模拟机（Android WebView）深测：CDP 驱动真实 APK 页面
 // 前置：debug APK 已装并启动；`adb forward tcp:9222 localabstract:webview_devtools_remote_<pid>`
 import { writeFileSync, mkdirSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const CDP = 'http://127.0.0.1:9222'
-const OUT = 'C:/Users/Administrator/AppData/Roaming/haolo_desktop/thread-groups/default/科研/outputs/emu-deep-test'
+const CDP = process.env.CDP_URL || 'http://127.0.0.1:9222'
+const OUT = process.env.SHOTS_DIR || path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '.local', 'emu-deep-test')
 mkdirSync(OUT, { recursive: true })
 
 const ts = Date.now()
