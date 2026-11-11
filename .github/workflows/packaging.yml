@@ -1,5 +1,5 @@
 name: Packaging
-true:
+on:
   push:
     branches:
     - main
