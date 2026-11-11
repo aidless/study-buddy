@@ -1,5 +1,5 @@
 name: PR Checks
-true:
+on:
   pull_request: null
 permissions:
   contents: read
