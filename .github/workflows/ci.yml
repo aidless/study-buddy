@@ -6,6 +6,8 @@ on:
     - develop
     - master
   pull_request: null
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
