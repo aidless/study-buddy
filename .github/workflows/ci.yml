@@ -1,51 +1,39 @@
 name: CI
 on:
   push:
-    branches: [main, develop, master]
-  pull_request:
-
+    branches:
+    - main
+    - develop
+    - master
+  pull_request: null
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - name: 环境信息
-        run: node -v && npm -v
-      - name: 安装依赖（lock 宽容，兼容不同 npm 版本）
-        run: npm install --no-audit --no-fund
-      - name: 题库与逻辑单测
-        run: npm test
-      - name: Web 构建
-        run: npm run build
-
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: 20
+        cache: npm
+    - name: 环境信息
+      run: node -v && npm -v
+    - name: 安装依赖（lock 宽容，兼容不同 npm 版本）
+      run: npm install --no-audit --no-fund
+    - name: 题库与逻辑单测
+      run: npm test
+    - name: Web 构建
+      run: npm run build
   secret-scan:
-    # .gitleaks.toml and .pre-commit-config.yaml are present, but a pre-commit
-    # hook is opt-in, missing from a fresh clone (.git/hooks holds only *.sample),
-    # bypassable with `git commit --no-verify`, and only ever inspects staged
-    # content -- never history. Nothing in CI looked at secrets, so a committed
-    # key would have left every other check green.
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-        with:
-          # Full history: a key leaked in an old commit is still a live key.
-          fetch-depth: 0
-      - name: gitleaks (full history, CLI)
-        # The gitleaks-action v2 was here first and turned every Dependabot pull
-        # request red with "GITHUB_TOKEN is now required to scan pull requests" --
-        # a failure caused by the action's requirements, not by the repository.
-        # Dependabot runs the workflow from its own branch, so fixing it on main
-        # does not help until the PR is regenerated. The CLI needs no token, scans
-        # the same checked-out history, and has one fewer moving part.
-        run: |
-          set -euo pipefail
-          curl -sSfL --retry 3 -o /tmp/gitleaks.tgz \
-            https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz
-          tar -xzf /tmp/gitleaks.tgz -C /tmp gitleaks
-          /tmp/gitleaks detect --source . --redact --no-banner --verbose
+    - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      with:
+        fetch-depth: 0
+    - name: gitleaks (full history, CLI)
+      run: "set -euo pipefail\ncurl -sSfL --retry 3 -o /tmp/gitleaks.tgz \\\n  https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz\n\
+        tar -xzf /tmp/gitleaks.tgz -C /tmp gitleaks\n/tmp/gitleaks detect --source\
+        \ . --redact --no-banner --verbose\n"
