@@ -160,3 +160,48 @@ npm test               # = vitest run（4 文件 11 测试）+ 题库校验（20
 ## 说明与后续可加
 - 推送提醒：Web Push 在 iOS Safari 支持有限，当前用「加到主屏 + 打开即看」的方式替代；如需强提醒可后续接微信服务号模板消息。
 - 按科目拆分的周计划可后续扩展。
+
+## 验收标准与复算
+
+**验收判据**：本仓判为合格的条件是 `python3 eval/run_cases.py` 通过率必须为 100%（20/20），且 `make eval` 退出码必须为 0；任何一条失败即判为不合格。
+
+### 题库验收（eval/cases.jsonl，20 条）
+
+| axis | 条数 | 判什么 |
+| --- | ---: | --- |
+| 题库规模 | 3 | 真题 720 / 大题 85 / 政治 100 |
+| 题库完整性 | 3 | 每题 4 选项、答案落在 A-D、无重号 |
+| 题库分布 | 3 | 四科题量下限 144、覆盖 18 个年份、无 2009 年前题目 |
+| 模拟题库 | 3 | 数学一 126 / 英语一 122 / 答案合法 |
+| 大题题库 | 3 | 13 个年份、解析覆盖 71 条、parts 覆盖 85 条 |
+| 专项题库 | 2 | 英语作文 16 / 数学解答题 24 |
+| 文档判据 | 2 | 本节存在、20/20 通过率写明 |
+| 门禁自查 | 1 | `--selftest` 反证开关存在 |
+
+每条 `expr`/`raises` 题都直接读 `src/lib/qbankSeed_raw.json`、`src/lib/qbankEssay_raw.json`、`src/lib/qbankMathGen.json`、`src/lib/qbankEnglishGen.json` 与 `src/lib/qbankPolitics.js`、`src/lib/qbankEnglishWriting.js`、`src/lib/qbankMathProblem.js`，期望值是现算的，不抄文档。
+
+### 三条命令
+
+```bash
+python3 eval/run_cases.py            # 期望 20/20
+python3 eval/run_cases.py --selftest # 期望 19/20（变红，退出码 0）
+make eval                            # 期望退出码 0，并落盘 eval/run-report.json
+```
+
+### 复算说明
+
+- `--selftest` 把首条期望值篡改后必须变红：若仍全绿，说明这套题是装饰（对应 AGENTS.md 第 8/21 条的 RED→GREEN 两段断言）。
+- `make eval` 跑 `python3 eval/run_cases.py --save`，生成 `eval/run-report.json`（total / passed / failed_by_axis / 逐条 detail）。任何人重跑 `--save` 后 diff 该文件即可复算。
+- 本仓既有测试（`vitest run` + `node scripts/verify_qbank.mjs`）需要 Node ESM 能解析本仓路径；本工作区路径含字面反斜杠，Node 侧会报 `ERR_INVALID_MODULE_SPECIFIER`（见上节环境说明），故 `make eval` 只跑 Python 侧题库。换到无反斜杠路径后，`npm test` 仍可独立复算题库不变量。
+
+### 失败归因
+
+`run_cases.py` 失败时按 axis 汇总，而不是只报一个 pass_rate。示例（README 章节缺失时）：
+
+```text
+18/20 cases passed
+失败归因（按 axis）：
+  文档判据: 2 条 —— readme-acceptance-section, readme-pass-line
+```
+
+即「README 没写验收章节」这类失败会集中在 `文档判据` 轴下并点名 id，直接定位到要修的文件。

@@ -1,0 +1,129 @@
+{
+ "total": 20,
+ "passed": 20,
+ "failed": 0,
+ "selftest": false,
+ "failed_by_axis": {},
+ "results": [
+  {
+   "id": "qbank-seed-count",
+   "axis": "题库规模",
+   "ok": true,
+   "detail": "720"
+  },
+  {
+   "id": "qbank-essay-count",
+   "axis": "题库规模",
+   "ok": true,
+   "detail": "85"
+  },
+  {
+   "id": "qbank-politics-count",
+   "axis": "题库规模",
+   "ok": true,
+   "detail": "100"
+  },
+  {
+   "id": "qbank-seed-options-four",
+   "axis": "题库完整性",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "qbank-seed-answer-legal",
+   "axis": "题库完整性",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "id": "qbank-seed-id-dup",
+   "axis": "题库完整性",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "id": "qbank-seed-subject-min",
+   "axis": "题库分布",
+   "ok": true,
+   "detail": "144"
+  },
+  {
+   "id": "qbank-seed-year-count",
+   "axis": "题库分布",
+   "ok": true,
+   "detail": "18"
+  },
+  {
+   "id": "qbank-seed-earliest-year",
+   "axis": "题库分布",
+   "ok": true,
+   "detail": "raised StopIteration"
+  },
+  {
+   "id": "qbank-math-count",
+   "axis": "模拟题库",
+   "ok": true,
+   "detail": "126"
+  },
+  {
+   "id": "qbank-english-count",
+   "axis": "模拟题库",
+   "ok": true,
+   "detail": "122"
+  },
+  {
+   "id": "qbank-math-answer-legal",
+   "axis": "模拟题库",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "id": "qbank-essay-year-count",
+   "axis": "大题题库",
+   "ok": true,
+   "detail": "13"
+  },
+  {
+   "id": "qbank-essay-analysis-covered",
+   "axis": "大题题库",
+   "ok": true,
+   "detail": "71"
+  },
+  {
+   "id": "qbank-essay-parts-covered",
+   "axis": "大题题库",
+   "ok": true,
+   "detail": "85"
+  },
+  {
+   "id": "qbank-writing-count",
+   "axis": "专项题库",
+   "ok": true,
+   "detail": "16"
+  },
+  {
+   "id": "qbank-problems-count",
+   "axis": "专项题库",
+   "ok": true,
+   "detail": "24"
+  },
+  {
+   "id": "readme-acceptance-section",
+   "axis": "文档判据",
+   "ok": true,
+   "detail": "## 验收标准与复算"
+  },
+  {
+   "id": "readme-pass-line",
+   "axis": "文档判据",
+   "ok": true,
+   "detail": "20/20"
+  },
+  {
+   "id": "gate-selftest-flag",
+   "axis": "门禁自查",
+   "ok": true,
+   "detail": "--selftest"
+  }
+ ]
+}
