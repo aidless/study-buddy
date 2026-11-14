@@ -1,4 +1,4 @@
-import urllib.request, json, os
+import urllib.request, os
 base = os.environ['SB_URL']
 key = os.environ['SB_SERVICE_ROLE']
 def req(method, url, data=None, headers=None, raw=None):
